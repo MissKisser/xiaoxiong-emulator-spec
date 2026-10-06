@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XBearInstance",
+  "description": "实例配置。Windows 端与 Android 端共用，平台特有字段置于 platformConfig 逃生舱。",
+  "type": "object",
+  "required": ["schemaVersion", "id", "displayName", "platform", "imageRef", "resources"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "description": "全局唯一标识，删除后进墓碑记录不得自动复用"
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "platform": {
+      "enum": ["windows", "android"]
+    },
+    "imageRef": {
+      "type": "string",
+      "description": "引用 image.schema.json 中的 id"
+    },
+    "resources": {
+      "type": "object",
+      "required": ["memoryMB", "cpuCores"],
+      "properties": {
+        "memoryMB":  { "type": "integer", "minimum": 512, "maximum": 16384 },
+        "cpuCores":  { "type": "integer", "minimum": 1, "maximum": 64 },
+        "diskGB":    { "type": "integer", "minimum": 4, "maximum": 512 }
+      }
+    },
+    "network": {
+      "type": "object",
+      "properties": {
+        "portForwards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["hostPort", "guestPort", "protocol"],
+            "properties": {
+              "hostPort":  { "type": "integer", "minimum": 1, "maximum": 65535 },
+              "guestPort": { "type": "integer", "minimum": 1, "maximum": 65535 },
+              "protocol":  { "enum": ["tcp", "udp"] },
+              "bind":      { "enum": ["loopback", "lan", "public"] }
+            }
+          }
+        },
+        "fixedAddress": {
+          "type": ["string", "null"],
+          "pattern": "^10\\.0\\.2\\.[0-9]{1,3}$",
+          "description": "多开场景硬需求，实例 IP 不得随启动顺序漂移"
+        },
+        "proxy": {
+          "type": ["object", "null"],
+          "properties": {
+            "type": { "enum": ["http", "https", "socks5", "pac"] },
+            "host": { "type": "string" },
+            "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+            "url":  { "type": "string", "description": "pac 类型时使用" }
+          }
+        },
+        "exposure": {
+          "enum": ["loopback", "lan", "public"],
+          "default": "loopback",
+          "description": "public 需阻断式二次确认"
+        }
+      }
+    },
+    "deviceIdentity": {
+      "type": "object",
+      "description": "每实例强制独立，标识不得自动复用",
+      "properties": {
+        "serialNo":  { "type": "string", "minLength": 8, "maxLength": 32 },
+        "androidId": { "type": "string", "minLength": 16, "maxLength": 32 },
+        "imei":      { "type": "string", "minLength": 14, "maxLength": 16 }
+      }
+    },
+    "platformConfig": {
+      "type": "object",
+      "description": "平台特有字段逃生舱，通用 Schema 只保证其为 object，不解析内部结构"
+    }
+  }
+}

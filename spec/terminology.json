@@ -1,0 +1,61 @@
+{
+  "version": "1.0.0",
+  "terms": [
+    {
+      "id": "instance",
+      "zh": "实例",
+      "en": "instance",
+      "meaning": "一个独立可运行的 Android 环境，拥有自己的数据、标识与生命周期",
+      "forbidden": ["模拟器实例", "虚拟机实例", "分身"]
+    },
+    {
+      "id": "image",
+      "zh": "镜像",
+      "en": "image",
+      "meaning": "用于创建实例的 Android 系统模板",
+      "forbidden": ["系统镜像", "ROM 包", "安装包"]
+    },
+    {
+      "id": "root",
+      "zh": "Root 权限",
+      "en": "root",
+      "meaning": "实例内的管理员权限，Windows 端为真 root，Android 端为容器内 root",
+      "forbidden": ["免 root", "超级用户权限"]
+    },
+    {
+      "id": "exposure",
+      "zh": "暴露级别",
+      "en": "exposure",
+      "meaning": "实例端口对外可达的范围，分 loopback / lan / public 三级",
+      "forbidden": ["网络模式", "端口模式"]
+    },
+    {
+      "id": "input-channel",
+      "zh": "输入通道",
+      "en": "input channel",
+      "meaning": "向实例投递触摸与按键的通路，分原生输入与投屏",
+      "forbidden": ["控制方式", "操控模式", "输入方式"]
+    },
+    {
+      "id": "fidelity",
+      "zh": "保真度",
+      "en": "fidelity",
+      "meaning": "实例在系统能力与运行特征上接近真机的程度",
+      "forbidden": ["仿真度", "拟真度", "还原度"]
+    },
+    {
+      "id": "startup",
+      "zh": "启动",
+      "en": "start",
+      "meaning": "将实例从停止态转为运行态",
+      "forbidden": ["开机", "启动虚拟机", "唤醒"]
+    },
+    {
+      "id": "stop",
+      "zh": "停止",
+      "en": "stop",
+      "meaning": "将实例从运行态转为停止态，保留数据",
+      "forbidden": ["关机", "关闭虚拟机", "挂起"]
+    }
+  ]
+}

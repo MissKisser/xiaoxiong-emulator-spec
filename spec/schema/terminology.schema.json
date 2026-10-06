@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XbearTerminology",
+  "description": "双端统一术语表。同一个概念在两端必须使用同一个词，禁止同义混用。",
+  "type": "object",
+  "required": ["version", "terms"],
+  "properties": {
+    "version": { "type": "string" },
+    "terms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "zh", "en", "meaning"],
+        "properties": {
+          "id":      { "type": "string" },
+          "zh":      { "type": "string", "description": "界面显示用中文" },
+          "en":      { "type": "string", "description": "代码标识与日志用英文" },
+          "meaning": { "type": "string", "description": "一句话说明，避免误解" },
+          "forbidden": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "禁止使用的近义词，代码审查时对照"
+          }
+        }
+      }
+    }
+  }
+}

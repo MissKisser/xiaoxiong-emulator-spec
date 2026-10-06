@@ -1,0 +1,25 @@
+# 本仓库采用白名单策略：只入库共享规格与三个根文件，
+# 其余一切（文档、调研源码、两端代码、镜像、密钥）一律不入库。
+
+/*
+!.gitignore
+!/README.md
+!/AGENTS.md
+!/CLAUDE.md
+!/spec/
+
+# 保险：即使未来被显式强制添加，这些仍然拒绝入库
+docs/
+research/
+windows/
+android/
+*.7z
+*.iso
+*.qcow2
+*.img
+
+# 密钥与本地配置（任何情况下禁止入库）
+*.key
+*.pem
+*.p12
+secrets.json

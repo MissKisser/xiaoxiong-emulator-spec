@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XBearImage",
+  "description": "镜像清单。verified 字段记录实测结论，是探测结论的沉淀载体。",
+  "type": "object",
+  "required": ["schemaVersion", "id", "displayName", "androidVersion", "abi", "source"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{1,62}$"
+    },
+    "displayName": { "type": "string" },
+    "androidVersion": {
+      "type": "string",
+      "pattern": "^\\d+(\\.\\d+)*$"
+    },
+    "abi": {
+      "enum": ["x86_64", "arm64-v8a"]
+    },
+    "source": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type":   { "enum": ["url", "local", "builtin"] },
+        "url":    { "type": "string", "format": "uri" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "verified": {
+      "type": "object",
+      "description": "M0 阶段实测回填，未验证的键不得臆测填写",
+      "properties": {
+        "inputChannel": {
+          "enum": ["native", "scrcpy", "none"],
+          "description": "native = QMP 原生输入，scrcpy = 投屏，none = 均不可用"
+        },
+        "verifiedAt":  { "type": "string", "format": "date-time" },
+        "qemuVersion": { "type": "string" },
+        "evidence":    { "type": "string", "description": "可复现的验证命令与关键输出" },
+        "fidelity": {
+          "type": "object",
+          "description": "P1~P6 逐项实测结论",
+          "properties": {
+            "P1_root":        { "enum": ["pass", "fail", "untested"] },
+            "P2_systemWrite": { "enum": ["pass", "fail", "untested"] },
+            "P3_moduleFlash": { "enum": ["pass", "fail", "untested"] },
+            "P4_imageSwap":   { "enum": ["pass", "fail", "untested"] },
+            "P5_rootPersist": { "enum": ["pass", "fail", "untested"] },
+            "P6_armApp":      { "enum": ["pass", "fail", "untested"] }
+          }
+        }
+      }
+    }
+  }
+}

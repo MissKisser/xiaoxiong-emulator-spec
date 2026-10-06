@@ -1,0 +1,59 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "name": "小熊模拟器设计令牌",
+  "version": "1.0.0",
+  "description": "双端共享的机器可读设计契约。两端代码在运行时与测试中直接读取，不得在代码中写字面量。",
+  "color": {
+    "brand": {
+      "primary":   { "value": "#C87533", "description": "品牌主色，小熊棕" },
+      "secondary": { "value": "#2E5C4A", "description": "辅助色，森林绿" },
+      "accent":    { "value": "#D9A441", "description": "强调色，蜂蜜黄" }
+    },
+    "surface": {
+      "base":      { "value": "#FFFFFF" },
+      "raised":    { "value": "#F7F4F0" },
+      "overlay":   { "value": "#00000066" }
+    },
+    "text": {
+      "primary":   { "value": "#1C1917" },
+      "secondary": { "value": "#57534E" },
+      "inverse":   { "value": "#FFFFFF" }
+    },
+    "state": {
+      "success": { "value": "#15803D" },
+      "warning": { "value": "#B45309" },
+      "danger":  { "value": "#B91C1C" },
+      "info":    { "value": "#1D4ED8" }
+    }
+  },
+  "spacing": {
+    "base": { "value": 4, "unit": "dp" },
+    "scale": {
+      "xs": 4, "sm": 8, "md": 16, "lg": 24, "xl": 32, "xxl": 48
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "primary":   { "value": "Microsoft YaHei UI, Segoe UI, sans-serif" },
+      "monospace": { "value": "Cascadia Mono, Consolas, monospace" }
+    },
+    "size": {
+      "caption": 12, "body": 14, "subtitle": 16, "title": 20, "display": 28
+    },
+    "weight": {
+      "regular": 400, "medium": 500, "bold": 700
+    }
+  },
+  "radius": {
+    "sm": 4, "md": 8, "lg": 16, "full": 9999
+  },
+  "motion": {
+    "duration": {
+      "fast": 120, "normal": 220, "slow": 400
+    }
+  },
+  "elevation": {
+    "card":  { "value": "0 1px 3px rgba(0,0,0,0.12)" },
+    "dialog": { "value": "0 8px 24px rgba(0,0,0,0.16)" }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "win-main-01",
+  "displayName": "主力实例",
+  "platform": "windows",
+  "imageRef": "bliss-os-17-x86_64",
+  "resources": {
+    "memoryMB": 4096,
+    "cpuCores": 4,
+    "diskGB": 64
+  },
+  "network": {
+    "portForwards": [
+      { "hostPort": 15555, "guestPort": 5555, "protocol": "tcp", "bind": "loopback" },
+      { "hostPort": 18080, "guestPort": 8080, "protocol": "tcp", "bind": "lan" }
+    ],
+    "fixedAddress": "10.0.2.15",
+    "proxy": {
+      "type": "http",
+      "host": "127.0.0.1",
+      "port": 7890
+    },
+    "exposure": "loopback"
+  },
+  "deviceIdentity": {
+    "serialNo": "WB1A19F30001X7",
+    "androidId": "a3f9c2e17b8d4056",
+    "imei": "861234567890123"
+  },
+  "platformConfig": {
+    "accelerator": "whpx",
+    "machine": "q35",
+    "graphics": "virtio-vga-gl"
+  }
+}

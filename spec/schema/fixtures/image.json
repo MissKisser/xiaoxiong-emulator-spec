@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "bliss-os-17-x86_64",
+  "displayName": "Bliss OS 17 (Android 14)",
+  "androidVersion": "14",
+  "abi": "x86_64",
+  "source": {
+    "type": "url",
+    "url": "https://sourceforge.net/projects/blissos-dev/files/",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "verified": {
+    "inputChannel": "none",
+    "verifiedAt": "2026-10-07T00:00:00+08:00",
+    "qemuVersion": "11.1.0",
+    "evidence": "W-M0 尚未开始下载镜像，sha256 为占位值，实测后必须回填真实值",
+    "fidelity": {
+      "P1_root": "untested",
+      "P2_systemWrite": "untested",
+      "P3_moduleFlash": "untested",
+      "P4_imageSwap": "untested",
+      "P5_rootPersist": "untested",
+      "P6_armApp": "untested"
+    }
+  }
+}
