@@ -80,4 +80,6 @@ git commit -m "chore: 引入共享规格层"
 
 ## 许可证
 
-**待定。** 项目已确定开源，但具体许可证尚未选定，仓库当前无 LICENSE 文件。
+本项目采用 **Apache License 2.0**。完整条款见根目录 `LICENSE`。
+
+与依赖的关系：QEMU 以独立进程方式调用，不构成链接，其 GPLv2 不影响本项目授权。Bliss OS 基于 AOSP（Apache-2.0）。若日后将隐藏栈模块（SUSFS / PathMask，GPL 系）以源码形式并入本仓库，需重新评估授权策略。
