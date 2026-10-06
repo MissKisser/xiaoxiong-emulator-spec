@@ -33,7 +33,13 @@
       "properties": {
         "memoryMB":  { "type": "integer", "minimum": 512, "maximum": 16384 },
         "cpuCores":  { "type": "integer", "minimum": 1, "maximum": 64 },
-        "diskGB":    { "type": "integer", "minimum": 4, "maximum": 512 }
+        "diskGB":    { "type": "integer", "minimum": 4, "maximum": 512 },
+        "cpuModel":  {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "QEMU -cpu 型号。缺省由平台按镜像的指令集要求选型，选出的型号必须同时被 WHPX 接受且含镜像要求的指令集。Android-x86 系镜像要求 SSE4.2，默认 qemu64 缺失会导致系统主动拒绝引导。"
+        }
       }
     },
     "network": {
