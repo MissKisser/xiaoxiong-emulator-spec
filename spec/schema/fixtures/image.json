@@ -1,19 +1,20 @@
 {
   "schemaVersion": "1.0.0",
-  "id": "bliss-os-17-x86_64",
-  "displayName": "Bliss OS 17 (Android 14)",
-  "androidVersion": "14",
+  "id": "bliss-os-14.10.3-x86_64",
+  "displayName": "Bliss OS 14.10.3 (Android 11)",
+  "androidVersion": "11",
   "abi": "x86_64",
   "source": {
     "type": "url",
-    "url": "https://sourceforge.net/projects/blissos-dev/files/",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    "url": "https://sourceforge.net/projects/blissos-x86/files/Official/BlissOS14/FOSS/Generic/Bliss-v14.10.3-x86_64-OFFICIAL-foss-20241012.iso/download",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "sizeBytes": 2040528896
   },
   "verified": {
     "inputChannel": "none",
-    "verifiedAt": "2026-10-07T00:00:00+08:00",
+    "verifiedAt": "2026-10-07T01:20:00+08:00",
     "qemuVersion": "11.1.0",
-    "evidence": "W-M0 尚未开始下载镜像，sha256 为占位值，实测后必须回填真实值",
+    "evidence": "镜像下载中，sha256 为占位值。官方公布的 MD5 为 d77c2d1cde102c9edee314f101a746f0，下载完成后必须以实算 sha256 回填。Bliss OS 17 与 18 已从官方渠道下架（官网公示公开镜像暂停），故首验镜像改选本条。",
     "fidelity": {
       "P1_root": "untested",
       "P2_systemWrite": "untested",

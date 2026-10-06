@@ -25,15 +25,17 @@
     "source": {
       "type": "object",
       "required": ["type"],
+      "additionalProperties": false,
       "properties": {
-        "type":   { "enum": ["url", "local", "builtin"] },
-        "url":    { "type": "string", "format": "uri" },
-        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        "type":      { "enum": ["url", "local", "builtin"] },
+        "url":       { "type": "string", "format": "uri" },
+        "sha256":    { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sizeBytes": { "type": "integer", "minimum": 0 }
       }
     },
     "verified": {
       "type": "object",
-      "description": "M0 阶段实测回填，未验证的键不得臆测填写",
+      "additionalProperties": false,
       "properties": {
         "inputChannel": {
           "enum": ["native", "scrcpy", "none"],
@@ -45,6 +47,7 @@
         "fidelity": {
           "type": "object",
           "description": "P1~P6 逐项实测结论",
+          "additionalProperties": false,
           "properties": {
             "P1_root":        { "enum": ["pass", "fail", "untested"] },
             "P2_systemWrite": { "enum": ["pass", "fail", "untested"] },
