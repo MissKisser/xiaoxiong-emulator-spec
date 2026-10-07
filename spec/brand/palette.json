@@ -1,0 +1,146 @@
+{
+  "name": "小熊模拟器品牌配色映射",
+  "version": "1.0.0",
+  "description": "把品牌语义名映射到 design-tokens.json 的令牌键。两端代码与 SVG 资产中的每一个色值都必须能由本文件解析得到，不得出现未登记的颜色。",
+  "source": "tokens/design-tokens.json",
+  "roles": {
+    "bear-brown": {
+      "token": "color.brand.primary",
+      "value": "#C87533",
+      "description": "小熊棕。浅色底纯图形的熊头，以及各版本的吻部与内耳"
+    },
+    "forest-green": {
+      "token": "color.brand.secondary",
+      "value": "#2E5C4A",
+      "description": "森林绿。应用图标与横版的承载地砖，以及反色版的五官"
+    },
+    "honey-yellow": {
+      "token": "color.brand.accent",
+      "value": "#D9A441",
+      "description": "蜂蜜黄。品牌资产刻意不占用此色：它在白底上仅 2.25:1，承载文字或小尺寸五官会失效。仅留给界面延展与点缀，且不得作为信息主色"
+    },
+    "fur-light": {
+      "token": "color.surface.raised",
+      "value": "#F7F4F0",
+      "description": "暖白毛色。反色版与应用图标的熊头，以及反色横版的副标题"
+    },
+    "ink": {
+      "token": "color.text.primary",
+      "value": "#1C1917",
+      "description": "墨色。浅色底横版的主标题，以及正色版五官"
+    },
+    "ink-soft": {
+      "token": "color.text.secondary",
+      "value": "#57534E",
+      "description": "浅色底横版的副标题"
+    },
+    "on-dark": {
+      "token": "color.text.inverse",
+      "value": "#FFFFFF",
+      "description": "反色横版的主标题"
+    },
+    "canvas": {
+      "token": "color.surface.base",
+      "value": "#FFFFFF",
+      "description": "浅色基面。判定图形属于浅色底还是深色底的参照"
+    }
+  },
+  "colorways": {
+    "mark-on-light": {
+      "background": "浅色基面，如 canvas 与 fur-light",
+      "tile": null,
+      "bear": "bear-brown",
+      "muzzle": "fur-light",
+      "features": "ink"
+    },
+    "mark-on-dark": {
+      "background": "深色底，如 ink 及更暗的底色",
+      "tile": null,
+      "bear": "fur-light",
+      "muzzle": "bear-brown",
+      "features": "forest-green"
+    },
+    "app-icon": {
+      "background": "自带地砖，不依赖外部底色",
+      "tile": "forest-green",
+      "bear": "fur-light",
+      "muzzle": "bear-brown",
+      "features": "ink"
+    },
+    "horizontal-on-light": {
+      "background": "浅色基面",
+      "mark": "app-icon",
+      "wordmark-primary": "ink",
+      "wordmark-secondary": "ink-soft"
+    },
+    "horizontal-on-dark": {
+      "background": "深色底",
+      "mark": "app-icon",
+      "wordmark-primary": "on-dark",
+      "wordmark-secondary": "fur-light"
+    }
+  },
+  "contrast": {
+    "note": "WCAG 相对亮度比值，取自上方各角色的实际取值，供两端在自定义底色上做取舍",
+    "ratios": {
+      "bear-brown/canvas": 3.47,
+      "bear-brown/fur-light": 3.17,
+      "bear-brown/forest-green": 2.2,
+      "fur-light/forest-green": 6.98,
+      "ink/fur-light": 15.95,
+      "ink/bear-brown": 5.04,
+      "forest-green/fur-light": 6.98,
+      "on-dark/ink": 17.49,
+      "ink-soft/canvas": 7.63,
+      "honey-yellow/canvas": 2.25
+    }
+  },
+  "assets": [
+    {
+      "file": "logo-mark.svg",
+      "kind": "纯图形标识",
+      "colorway": "mark-on-light",
+      "viewBox": "0 0 256 256",
+      "aspect": "1:1",
+      "minSizePx": 16,
+      "background": "浅色"
+    },
+    {
+      "file": "logo-mark-inverse.svg",
+      "kind": "纯图形标识 反色版",
+      "colorway": "mark-on-dark",
+      "viewBox": "0 0 256 256",
+      "aspect": "1:1",
+      "minSizePx": 16,
+      "background": "深色"
+    },
+    {
+      "file": "logo-horizontal.svg",
+      "kind": "横版标识",
+      "colorway": "horizontal-on-light",
+      "viewBox": "0 0 500 160",
+      "aspect": "3.125:1",
+      "minSizePx": "96x31",
+      "background": "浅色"
+    },
+    {
+      "file": "logo-horizontal-inverse.svg",
+      "kind": "横版标识 反色版",
+      "colorway": "horizontal-on-dark",
+      "viewBox": "0 0 500 160",
+      "aspect": "3.125:1",
+      "minSizePx": "96x31",
+      "background": "深色"
+    },
+    {
+      "file": "icon-app.svg",
+      "kind": "应用图标",
+      "colorway": "app-icon",
+      "viewBox": "0 0 256 256",
+      "aspect": "1:1",
+      "minSizePx": 16,
+      "maxSizePx": 256,
+      "background": "自带地砖"
+    }
+  ]
+}

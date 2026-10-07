@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="restore-title">
+  <title id="restore-title">恢复</title>
+  <!-- 形态意图：环形逆时针箭头是回退的通用约定，箭头尖端朝左上，与磁盘链自上而下叠加的方向相反，读作「退回上一层」 -->
+  <g fill="none" stroke="#1C1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19.5 12a7.5 7.5 0 1 1-2.6-5.8" />
+    <path d="M13.8 3.2h3.4v3.4" />
+  </g>
+</svg>

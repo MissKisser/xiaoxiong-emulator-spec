@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="delete-title">
+  <title id="delete-title">删除</title>
+  <!-- 形态意图：桶身与桶盖分离的两段结构，删除在本产品中是高影响操作且需二次确认，桶盖留出缺口以便在列表里与相邻图标区分开辨识方向 -->
+  <g fill="none" stroke="#B91C1C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4.5 6.5h15" />
+    <path d="M9.5 6.5V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v1.5" />
+    <path d="M6.5 6.5l1 12a2 2 0 0 0 2 1.8h5a2 2 0 0 0 2-1.8l1-12" />
+  </g>
+</svg>

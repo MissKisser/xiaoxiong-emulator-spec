@@ -39,14 +39,30 @@ spec/
 ├─ tokens/
 │  └─ design-tokens.json        设计令牌：品牌色 / 间距 / 字号 / 圆角 / 动效
 ├─ terminology.json             双端统一术语表，含禁用近义词
+├─ version.json                 产品版本与规格版本，及各自的递增规则
+├─ baseline.json                两端共同的性能基线；目标值与实测值分列
+├─ brand/                       品牌资产：标识、应用图标、配色映射与使用约束
+│  ├─ logo-mark.svg             主标识（纯图形，浅色底）
+│  ├─ logo-mark-inverse.svg     主标识反色版（深色底）
+│  ├─ logo-horizontal.svg       横版标识（图形 + 中英文字，浅色底）
+│  ├─ logo-horizontal-inverse.svg 横版标识反色版（深色底）
+│  ├─ icon-app.svg              方形应用图标，窗口与任务栏
+│  ├─ palette.json              语义名到设计令牌键的映射与实测对比度
+│  └─ README.md                 用途、最小尺寸、留白与深浅背景约束
+├─ icons/                       功能图标集：纯 SVG，色值一律取自设计令牌
+│  ├─ README.md                 图标清单、用途与适用场景
+│  └─ *.svg                     实例、快照、镜像、交互、传输、状态与风险类图标
 └─ schema/
    ├─ instance.schema.json      实例配置契约
    ├─ image.schema.json         镜像清单契约
+   ├─ snapshot.schema.json      快照元数据契约
    ├─ terminology.schema.json   术语表结构定义
    └─ fixtures/                 双向兼容测试样例
       ├─ instance.windows.json  Windows 端样例
       ├─ instance.android.json  Android 端样例
-      └─ image.json             镜像样例
+      ├─ image.json             镜像样例
+      ├─ snapshot-minimal.json  快照样例（仅必填字段）
+      └─ snapshot-full.json     快照样例（覆盖全部可选字段）
 ```
 
 ## 两端如何引用
@@ -65,6 +81,8 @@ git commit -m "chore: 引入共享规格层"
 3. 任何一端新增字段，另一端必须能解析且不丢字段——由双向兼容测试在 CI 中保证
 4. `image.json` 的 `verified` 字段只填实测结论，`untested` 不得臆测改为 `pass`
 5. 规格变更必须先改本仓库，再更新两端代码；不允许某端私自扩展字段语义
+6. `baseline.json` 的 `measured` 只填真实实测值，**不得由 `target` 推导或估算**；无法测量时保持 `null` 并写明 `blockedBy`
+7. 版本号一律从 `version.json` 读取，两端代码与关于页**不得硬编码任何版本字符串**；产品版本与规格版本是两个独立序列
 
 ## 目标能力基线
 

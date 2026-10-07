@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "snap-win-main-01-0001",
+  "instanceRef": "win-main-01",
+  "imageRef": "bliss-os-17-x86_64",
+  "createdAt": "2026-10-07T11:20:00+08:00",
+  "state": "ready"
+}

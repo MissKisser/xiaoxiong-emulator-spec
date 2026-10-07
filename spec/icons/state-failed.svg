@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="state-failed-title">
+  <title id="state-failed-title">实例失败态</title>
+  <!-- 形态意图：三角警示加叹号表示实例已进入失败态。失败态是一个运行结果，不指示错误类别，四类错误各有独立图标，UI 不得用本图标代替错误分类 -->
+  <g fill="none" stroke="#B91C1C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 4.2 21.5 20H2.5z" />
+    <path d="M12 10v4.2" />
+  </g>
+  <circle cx="12" cy="17.2" r="1.25" fill="#B91C1C" />
+</svg>

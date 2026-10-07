@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="exposure-title">
+  <title id="exposure-title">暴露级别</title>
+  <!-- 形态意图：盾牌代表端口对外可达范围的三级边界，盾内的点从内到外表示可达范围逐级放大。三级之间是安全边界而非普通开关，故用盾而非滑块 -->
+  <g fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2.8 20 6v6.2c0 4.3-3.2 7.6-8 9-4.8-1.4-8-4.7-8-9V6z" />
+  </g>
+  <circle cx="12" cy="11.5" r="1.6" fill="#B45309" />
+  <circle cx="8.6" cy="14.2" r="1.6" fill="#B45309" opacity="0.55" />
+  <circle cx="15.4" cy="14.2" r="1.6" fill="#B45309" opacity="0.55" />
+</svg>

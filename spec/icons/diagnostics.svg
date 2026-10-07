@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="diagnostics-title">
+  <title id="diagnostics-title">诊断包</title>
+  <!-- 形态意图：放大镜压在文件之上，读作「把现场材料取出来看」。诊断包是一键导出的成品而非日志目录本身，故用纸页而非波形或滚动条 -->
+  <g fill="none" stroke="#1C1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13.5 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h4" />
+    <path d="M13.5 3.5 17 7v2.5" />
+    <path d="M8.5 9h4" />
+  </g>
+  <g fill="none" stroke="#2E5C4A" stroke-width="2" stroke-linecap="round">
+    <circle cx="15" cy="14.5" r="4.5" />
+    <path d="m18.3 17.8 2.7 2.7" />
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="fidelity-title">
+  <title id="fidelity-title">保真度</title>
+  <!-- 形态意图：盾内对勾表示能力已达成，即保真度六项逐项实测通过的结论。半环刻度读作「按项核验」，避免用一个实心盾把未达成项也读成已达成 -->
+  <g fill="none" stroke="#1C1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2.8 20 6v6.2c0 4.3-3.2 7.6-8 9-4.8-1.4-8-4.7-8-9V6z" />
+  </g>
+  <path d="m8.4 11.8 2.6 2.6 4.6-4.8" fill="none" stroke="#2E5C4A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

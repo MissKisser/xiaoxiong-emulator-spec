@@ -1,0 +1,82 @@
+{
+  "version": "0.1.0",
+  "status": "targets-only",
+  "statusNote": "本文件当前只含一期目标值，实测值全部为 null。回填前提是至少一个候选镜像能在目标宿主引导到桌面；在此之前任何实测列都不得填写，否则验收会退化成对未验证数字的背书。",
+  "units": {
+    "duration": "s",
+    "latency": "ms",
+    "framerate": "fps",
+    "memory": "GB"
+  },
+  "metrics": [
+    {
+      "id": "cold-start",
+      "name": "冷启动时间",
+      "measure": "QEMU 进程启动至调试通路可连接",
+      "target": { "op": "<=", "value": 60, "unit": "s" },
+      "measured": null,
+      "owner": "windows"
+    },
+    {
+      "id": "app-cold-start",
+      "name": "实例内应用冷启动",
+      "measure": "桌面点击图标至首帧呈现",
+      "target": { "op": "<=", "value": 3, "unit": "s" },
+      "measured": null,
+      "owner": "windows",
+      "blockedBy": "需要可达桌面的实例"
+    },
+    {
+      "id": "interaction-latency",
+      "name": "交互延迟",
+      "measure": "输入投递至画面响应的往返",
+      "target": { "op": "<=", "value": 150, "unit": "ms" },
+      "measured": null,
+      "owner": "windows",
+      "blockedBy": "需要可达桌面的实例"
+    },
+    {
+      "id": "steady-framerate",
+      "name": "稳态帧率",
+      "measure": "常规界面滚动的平均帧率",
+      "target": { "op": ">=", "value": 30, "unit": "fps" },
+      "measured": null,
+      "owner": "windows",
+      "blockedBy": "需要可达桌面的实例"
+    },
+    {
+      "id": "memory-per-instance",
+      "name": "单实例内存占用",
+      "measure": "宿主观测到的常驻内存",
+      "target": { "op": "<=", "value": 4, "unit": "GB" },
+      "measured": null,
+      "owner": "windows"
+    }
+  ],
+  "density": {
+    "note": "多实例密度必须绑定宿主内存配置，脱离宿主前提的并行数无法验收。",
+    "profiles": [
+      {
+        "tier": "入门",
+        "hostMemoryGB": 16,
+        "targetInstances": { "op": ">=", "value": 2 },
+        "measured": null
+      },
+      {
+        "tier": "主流",
+        "hostMemoryGB": 32,
+        "targetInstances": { "op": ">=", "value": 3 },
+        "measured": null
+      }
+    ],
+    "regression": {
+      "note": "并行实例数达标的附加条件是延迟劣化不超过 30%。",
+      "maxDegradationPercent": 30
+    }
+  },
+  "fillPolicy": [
+    "measured 必须来自真实实测，禁止由 target 推导或估算。",
+    "回填时同时记录宿主配置、镜像标识与测量日期，否则该值无法复核。",
+    "指标无法测量时保持 null 并填写 blockedBy，不允许用 0 或默认值占位。"
+  ]
+}

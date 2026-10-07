@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="stop-title">
+  <title id="stop-title">停止</title>
+  <!-- 形态意图：与启动的三角成对，实心方块读作停止。圆角半径略大于启动三角的视觉尖角，使两者在同一列表里并置时重心稳定 -->
+  <rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="#1C1917" />
+</svg>

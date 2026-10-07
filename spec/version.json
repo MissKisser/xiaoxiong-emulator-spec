@@ -1,0 +1,62 @@
+{
+  "product": {
+    "id": "xiaoxiong-emulator",
+    "nameZh": "小熊模拟器",
+    "nameEn": "Xiaoxiong Emulator",
+    "version": "0.1.0"
+  },
+  "spec": {
+    "version": "1.2.0",
+    "description": "共享规格层版本，覆盖 spec/ 下全部机器可读契约（schema、tokens、terminology、brand、icons、baseline、version）。"
+  },
+  "terminology": {
+    "versionField": "spec/terminology.json 的 version 字段",
+    "rule": "仅当术语条目本身发生增删改时才递增 terminology.json 的 version；schema、tokens、icons 等其他契约的变更不带动它递增。",
+    "relationship": "terminology.json 的 version 与本文件的 spec.version 是包含关系而非恒等关系：术语表版本落后于规格层版本属正常，只有术语变更才会让两者同时递增。"
+  },
+  "build": {
+    "idFormat": "{productVersion}+{commitShort}",
+    "description": "构建标识由产品版本与提交短哈希拼成，诊断包与关于页统一引用本字段，不允许各处自行拼接。",
+    "fields": {
+      "productVersion": "取自 product.version",
+      "commitShort": "取自构建时所在提交的短哈希；源码树构建且无版本控制信息时为 unknown"
+    }
+  },
+  "rules": [
+    {
+      "level": "major",
+      "when": "规格契约发生不向后兼容的变更，例如删除或重命名既有术语、修改 Schema 的必填项或取值域",
+      "effects": ["递增 spec.version 的主版本", "两端必须各自完成一次完整契约校验"]
+    },
+    {
+      "level": "minor",
+      "when": "规格契约向后兼容地新增内容，例如新增术语、新增可选字段、新增样例",
+      "effects": ["递增 spec.version 的次版本", "两端须能解析旧版本契约"]
+    },
+    {
+      "level": "patch",
+      "when": "规格契约的措辞澄清或修正，不改变任何可解析内容",
+      "effects": ["递增 spec.version 的修订号"]
+    },
+    {
+      "level": "product-major",
+      "when": "产品发布破坏性变更",
+      "effects": ["递增 product.version 的主版本"]
+    },
+    {
+      "level": "product-minor",
+      "when": "产品新增用户可见能力",
+      "effects": ["递增 product.version 的次版本"]
+    },
+    {
+      "level": "product-patch",
+      "when": "缺陷修复与不改变用户可见行为的调整",
+      "effects": ["递增 product.version 的修订号"]
+    }
+  ],
+  "consistency": {
+    "note": "product.version 与 spec.version 是两个独立递增序列，不要用其中一个推导另一个。",
+    "driftPolicy": "两端读取本文件渲染关于页与版本信息，不得在代码中硬编码任何版本字符串。",
+    "schemaCompatibility": "spec.version 的 minor 递增表示新增向后兼容的契约，两端均须能解析上一版本；major 递增表示不向后兼容，两端必须各自完成一次完整契约校验。"
+  }
+}

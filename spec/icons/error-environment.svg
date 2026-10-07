@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="error-environment-title">
+  <title id="error-environment-title">宿主环境错误</title>
+  <!-- 形态意图：宿主机轮廓加断开的接点，表示宿主不满足运行前提，例如虚拟化组件缺失或未启用。此类错误必须在启动前拦截，因此图形不含设备侧元素 -->
+  <g fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.8" y="5.5" width="18.4" height="11" rx="2" />
+    <path d="M7.5 20.5h9" />
+    <path d="M12 16.5v4" />
+  </g>
+  <path d="M8.6 11 12 8.6 15.4 11" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M8.6 14.4h6.8" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 2.6" />
+</svg>

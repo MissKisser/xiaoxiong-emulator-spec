@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="image-title">
+  <title id="image-title">镜像</title>
+  <!-- 形态意图：环形读作光盘，中心孔是安装介质的固有特征；一段留白高光弧暗示可读取的介质表面而非普通圆环 -->
+  <g fill="none" stroke="#1C1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8.5" />
+    <circle cx="12" cy="12" r="2.5" />
+  </g>
+  <path d="M12 3.5a8.5 8.5 0 0 1 6 2.5" fill="none" stroke="#2E5C4A" stroke-width="2" stroke-linecap="round" />
+</svg>

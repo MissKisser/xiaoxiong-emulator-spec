@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="projection-title">
+  <title id="projection-title">投屏</title>
+  <!-- 形态意图：屏幕外框代表宿主窗口，屏内箭头指向框外读作「把实例画面送到宿主窗口」。投屏只负责看，与输入通道是两个概念，故本图标不含指针或手指元素 -->
+  <g fill="none" stroke="#1C1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.5" y="4" width="19" height="13" rx="2" />
+    <path d="M8.5 20.5h7" />
+    <path d="M12 17v3.5" />
+  </g>
+  <path d="M9.5 9.5h5M13 7.5l2 2-2 2" fill="none" stroke="#2E5C4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

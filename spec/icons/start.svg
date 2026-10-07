@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="start-title">
+  <title id="start-title">启动</title>
+  <!-- 形态意图：实心三角是启动的通用约定，填充而非描边保证缩小后仍是一个有面积的块面，不会在 16 px 退化为几根断续细线 -->
+  <path d="M9 5.8 18.2 12 9 18.2Z" fill="#2E5C4A" stroke="#2E5C4A" stroke-width="2" stroke-linejoin="round" />
+</svg>

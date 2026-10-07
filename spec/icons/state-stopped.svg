@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="state-stopped-title">
+  <title id="state-stopped-title">实例停止态</title>
+  <!-- 形态意图：空心方块表示实例处于停止态且数据保留。用空心而非实心，与启动/停止操作图标的实心方块拉开区别：本图标是状态，操作图标是动作 -->
+  <g fill="none" stroke="#1C1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="5" width="14" height="14" rx="2.5" />
+  </g>
+</svg>

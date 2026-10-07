@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XBearSnapshot",
+  "description": "实例快照的元数据。描述某个实例在某一时刻的状态，可用于把该实例回退到创建时刻。宿主持有，Windows 端与 Android 端共用；平台特有的磁盘链字段置于 platformConfig 逃生舱。",
+  "type": "object",
+  "required": ["schemaVersion", "id", "instanceRef", "imageRef", "createdAt", "state"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "快照契约自身的版本。与 spec/version.json 的 spec.version 同源，改动本契约的可解析内容时必须同步递增。"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "description": "快照的全局唯一标识，删除后进墓碑记录不得自动复用。"
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "快照的显示名，供用户在快照列表中辨认，缺省时由两端从创建时刻渲染。"
+    },
+    "instanceRef": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "description": "所属实例的标识，引用 instance.schema.json 中的 id。快照随实例一同删除，实例删除后该引用不再可解析。"
+    },
+    "imageRef": {
+      "type": "string",
+      "description": "来源镜像的标识，引用 image.schema.json 中的 id。记录创建时刻实例所基于的镜像，与实例当前的 imageRef 可能不同。"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+      "description": "快照创建时刻，必须带时区偏移，两端据此换算为各自时区展示。"
+    },
+    "state": {
+      "enum": ["creating", "ready", "failed"],
+      "description": "快照状态。creating = 宿主持有该快照元数据但磁盘链尚未写完，不可用于恢复；ready = 磁盘链完整，可用于恢复；failed = 写入中断或校验不通过，不可用于恢复，且不得据此销毁实例数据。"
+    },
+    "parentRef": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "description": "父快照的标识，引用另一份 snapshot 的 id。快照链式叠加，缺省表示这是该实例的首个快照；删除父快照前必须先处理子快照，否则子快照的磁盘链不完整。"
+    },
+    "note": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "用户为该快照写的备注，说明创建意图，例如改动前的状态。"
+    },
+    "platformConfig": {
+      "type": "object",
+      "description": "平台特有字段逃生舱。Windows 端记录磁盘链的层数与各层文件路径，Android 端记录容器侧的还原点标识。通用 Schema 只保证其为 object，不解析内部结构。"
+    }
+  }
+}

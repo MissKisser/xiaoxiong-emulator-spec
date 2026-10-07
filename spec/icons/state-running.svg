@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="state-running-title">
+  <title id="state-running-title">实例运行态</title>
+  <!-- 形态意图：中心实心点加三道外扩环读作「正在活动」，与停止态的空心方块构成状态对照。环数固定为三，避免在 16 px 下糊成一团 -->
+  <g fill="none" stroke="#2E5C4A" stroke-width="2" stroke-linecap="round">
+    <circle cx="12" cy="12" r="3.2" />
+    <path d="M12 5.6a6.4 6.4 0 0 1 4.5 1.9" />
+    <path d="M12 18.4a6.4 6.4 0 0 1-4.5-1.9" />
+  </g>
+  <circle cx="12" cy="12" r="1.5" fill="#2E5C4A" />
+</svg>
