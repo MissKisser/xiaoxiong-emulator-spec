@@ -90,7 +90,17 @@
     },
     "platformConfig": {
       "type": "object",
-      "description": "平台特有字段逃生舱，通用 Schema 只保证其为 object，不解析内部结构"
+      "description": "平台特有字段逃生舱，通用 Schema 只保证其为 object，不解析内部结构",
+      "properties": {
+        "initrdImage": {
+          "type": "string",
+          "description": "初始 ramdisk 文件路径/引用。与 kernelImage 配对；声明了 kernelImage 时强烈建议同时声明，但契约层面保持可选"
+        },
+        "kernelAppend": {
+          "type": "string",
+          "description": "内核命令行骨架与自定义参数（如 root=/dev/ram0 quiet nomodeset）"
+        }
+      }
     }
   }
 }

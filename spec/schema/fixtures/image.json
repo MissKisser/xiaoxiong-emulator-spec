@@ -12,9 +12,9 @@
   },
   "verified": {
     "inputChannel": "none",
-    "verifiedAt": "2026-10-07T02:55:00+08:00",
+    "verifiedAt": "2026-10-08T21:02:15+08:00",
     "qemuVersion": "11.1.0",
-    "evidence": "镜像已通过完整性校验：大小 2040528896 字节，MD5 d77c2d1cde102c9edee314f101a746f0 与官方公布值一致，SHA256 44e4144a3d31f8233a5826b6a5079c4514589286a2f9b59bdf8d303d10e8f577 经 certutil 独立复核。首轮分片下载虽大小精确匹配但 MD5 不符（part060 与 part059 内容重复，断点续传未能在源站重定向链上保持 Range 语义），已隔离并以全新目录、不做断点续传的单轮流程重下后通过闸门。保真度六项仍为 untested，须待 W-M0 实测回填。Bliss OS 17 与 18 已从官方渠道下架（官网公示公开镜像暂停），故首验镜像为本条。",
+    "evidence": "首验时间 2026-10-08，宿主 Windows 11 Insider 26200 / i5-13500HX / 16GB 物理内存（采样时可用内存在 1.09GB 至 3.5GB 之间波动），虚拟化 QEMU 11.1.0 + WHPX 加速。引导结论：镜像经本产品真实实例管理管线（创建、启动、停止全链路）稳定引导至 Bliss OS 14.10.3 安卓桌面，方法为自官方 ISO 提取内核与 initrd 直启（-kernel / -initrd / -append root=/dev/ram0 quiet nomodeset），qcow2 系统盘、2048MB 内存、4 vCPU；桌面首帧（开机动画帧）实测 15.0 秒，采样粒度 2 秒，真实值落在 (13,15] 秒区间，且取得该值时宿主可用内存仅 1.09GB。首验根因：镜像默认引导在无 3D 加速的虚拟显卡上 SurfaceFlinger 反复 SIGABRT 死循环（串口日志可见 signal 6 与 signal 9 循环），initrd 脚本把内核打印级别置零造成假死假象；仅增加 nomodeset 一个参数即解决，SELinux permissive 与 HWACCEL=0 均非必需。宿主协变量：本宿主裸 WHPX 不执行客户机 CPU，必须附加 kernel-irqchip=off，否则虚拟化退出码为 4。调试通路：镜像 live 模式默认未开启 service.adb.tcp.port（解包 initrd 证实 /init 不消费内核命令行中的该 token），DEBUG=2 串口调试壳入口又被 /init 的 auto_detect 随机挂死阻断（累计 8 次尝试仅 1 次出壳），ADB over TCP 本轮未打通。保真度六项因此全部维持 untested：P1_root、P2_systemWrite、P5_rootPersist 需客户机 shell 或 ADB 才能实测，本轮受阻；P3_moduleFlash、P4_imageSwap、P6_armApp 本轮未涉及，均不得臆测改为 pass。下载闸门教训：SourceForge 反爬会劫持伪装浏览器 UA 的 curl 并返回 HTTP 200 加 HTML 拦截页冒充下载成功，下载闸门必须先断言首字节非 HTML。镜像完整性：大小 2040528896 字节，MD5 d77c2d1cde102c9edee314f101a746f0 与官方公布值一致，SHA256 44e4144a3d31f8233a5826b6a5079c4514589286a2f9b59bdf8d303d10e8f577 经独立复核；首轮分片下载虽大小精确匹配但 MD5 不符（断点续传未能在源站重定向链上保持 Range 语义），已隔离并以全新目录、不做断点续传的单轮流程重下后通过闸门。Bliss OS 17 与 18 已从官方渠道下架（官网公示公开镜像暂停），故首验镜像为本条。",
     "fidelity": {
       "P1_root": "untested",
       "P2_systemWrite": "untested",

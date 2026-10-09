@@ -1,7 +1,7 @@
 {
   "version": "0.1.0",
-  "status": "targets-only",
-  "statusNote": "本文件当前只含一期目标值，实测值全部为 null。回填前提是至少一个候选镜像能在目标宿主引导到桌面；在此之前任何实测列都不得填写，否则验收会退化成对未验证数字的背书。",
+  "status": "partial-measured",
+  "statusNote": "首批评测已于 2026-10-08 回填，status 由 targets-only 改为 partial-measured：既有真实实测值，也有明确受阻项。已回填：memory-per-instance 的 measured=2.09，观测口径为 QEMU 进程工作集峰值（GB 按 1024^3 折算自 2246844416 字节），实例规格 2048MB 内存 4 vCPU，方法为长跑期间每秒一次共 225 次秒级采样取峰值；宿主 Windows 11 Insider 26200 / i5-13500HX / 16GB 物理内存，采样时可用内存 2.25GB，同口径另有两轮长跑峰值 2.094GB 与 2.092GB 可复现，宿主可用内存降至 1.09GB 时短跑峰值回落至 1.474GB，故该值随宿主可用内存变化。仍未回填：cold-start 的口径终点是调试通路可连接，本轮镜像 live 模式未开启 ADB over TCP（解包 initrd 证实 /init 不消费该命令行 token），串口调试壳入口又被 /init 的 auto_detect 随机挂死阻断，实测仅有进程拉起 2.1 至 2.4 秒与桌面首帧 15.0 秒两个分段值，二者都不是本指标口径，不得充当 measured；app-cold-start、interaction-latency、steady-framerate 本轮无实测依据，保持 null；density 两档并行数本轮未测。measured 一律只填真实实测值，不得由 target 推导或估算。",
   "units": {
     "duration": "s",
     "latency": "ms",
@@ -15,7 +15,8 @@
       "measure": "QEMU 进程启动至调试通路可连接",
       "target": { "op": "<=", "value": 60, "unit": "s" },
       "measured": null,
-      "owner": "windows"
+      "owner": "windows",
+      "blockedBy": "口径终点是调试通路可连接，本轮无法测量：镜像 live 模式默认未开启 service.adb.tcp.port（解包 initrd 证实 /init 不消费该命令行 token），DEBUG=2 串口调试壳入口又被 /init 的 auto_detect 随机挂死阻断（累计 8 次尝试仅 1 次出壳）。已实测的分段值为进程拉起 2.1 至 2.4 秒与桌面首帧 15.0 秒，二者都不是本指标口径，只作口径拆分决策素材，不得充当 measured。"
     },
     {
       "id": "app-cold-start",
@@ -49,7 +50,7 @@
       "name": "单实例内存占用",
       "measure": "宿主观测到的常驻内存",
       "target": { "op": "<=", "value": 4, "unit": "GB" },
-      "measured": null,
+      "measured": 2.09,
       "owner": "windows"
     }
   ],

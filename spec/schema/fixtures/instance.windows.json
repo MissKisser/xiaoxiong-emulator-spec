@@ -30,6 +30,8 @@
   "platformConfig": {
     "accelerator": "whpx",
     "machine": "q35",
-    "graphics": "virtio-vga-gl"
+    "graphics": "virtio-vga-gl",
+    "initrdImage": "initrd.img",
+    "kernelAppend": "root=/dev/ram0 quiet nomodeset"
   }
 }
