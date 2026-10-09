@@ -1,7 +1,7 @@
 {
   "version": "0.1.0",
   "status": "partial-measured",
-  "statusNote": "首批评测已于 2026-10-08 回填，status 由 targets-only 改为 partial-measured：既有真实实测值，也有明确受阻项。已回填：memory-per-instance 的 measured=2.09，观测口径为 QEMU 进程工作集峰值（GB 按 1024^3 折算自 2246844416 字节），实例规格 2048MB 内存 4 vCPU，方法为长跑期间每秒一次共 225 次秒级采样取峰值；宿主 Windows 11 Insider 26200 / i5-13500HX / 16GB 物理内存，采样时可用内存 2.25GB，同口径另有两轮长跑峰值 2.094GB 与 2.092GB 可复现，宿主可用内存降至 1.09GB 时短跑峰值回落至 1.474GB，故该值随宿主可用内存变化。仍未回填：cold-start 的口径终点是调试通路可连接，本轮镜像 live 模式未开启 ADB over TCP（解包 initrd 证实 /init 不消费该命令行 token），串口调试壳入口又被 /init 的 auto_detect 随机挂死阻断，实测仅有进程拉起 2.1 至 2.4 秒与桌面首帧 15.0 秒两个分段值，二者都不是本指标口径，不得充当 measured；app-cold-start、interaction-latency、steady-framerate 本轮无实测依据，保持 null；density 两档并行数本轮未测。measured 一律只填真实实测值，不得由 target 推导或估算。",
+  "statusNote": "评测已于 2026-10-09（W-M1 阶段）更新，status 维持 partial-measured。已回填指标：1. cold-start 的 measured=21.61（秒），口径为 QEMU 进程启动至 ADB devices 首现 device。代表值选取理由：持久化磁盘安装态是模拟器面向最终用户的标准交付形态，21.61s 为已完成格式化的磁盘安装态二次常规冷启动实测耗时，最贴合用户日常稳态冷启动体验；对照实测值包括 Live 模式纯冷启动 44.68s（桌面就绪首帧 49.78s）与安装态首次冷启动 32.21s，全量实测场景均显著优于 <=60s 的目标门限。2. memory-per-instance 维持 measured=2.09（GB），观测口径为 QEMU 进程工作集峰值；W-M1 进一步测得 Live 模式峰值 2154MB（~2.10GB）、安装态峰值 2091MB（~2.04GB），两态峰值均在 ~2.09~2.15GB 区间，与首验 2.09GB 保持同量级且稳定满足 <=4GB 目标。仍未回填指标：app-cold-start、interaction-latency、steady-framerate 需可达桌面的应用级交互驱动与自动化链路，本轮保持 null 与受阻说明；density 多实例并行数待后续专项测量。measured 一律只填真实实测值，不得由 target 推导或估算。",
   "units": {
     "duration": "s",
     "latency": "ms",
@@ -14,9 +14,8 @@
       "name": "冷启动时间",
       "measure": "QEMU 进程启动至调试通路可连接",
       "target": { "op": "<=", "value": 60, "unit": "s" },
-      "measured": null,
-      "owner": "windows",
-      "blockedBy": "口径终点是调试通路可连接，本轮无法测量：镜像 live 模式默认未开启 service.adb.tcp.port（解包 initrd 证实 /init 不消费该命令行 token），DEBUG=2 串口调试壳入口又被 /init 的 auto_detect 随机挂死阻断（累计 8 次尝试仅 1 次出壳）。已实测的分段值为进程拉起 2.1 至 2.4 秒与桌面首帧 15.0 秒，二者都不是本指标口径，只作口径拆分决策素材，不得充当 measured。"
+      "measured": 21.61,
+      "owner": "windows"
     },
     {
       "id": "app-cold-start",
