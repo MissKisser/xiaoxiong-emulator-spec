@@ -23,5 +23,10 @@
       "P5_rootPersist": "untested",
       "P6_armApp": "untested"
     }
+  },
+  "boot": {
+    "kernel": "kernel",
+    "initrd": "initrd.img",
+    "kernelAppend": "root=/dev/ram0 quiet nomodeset"
   }
 }

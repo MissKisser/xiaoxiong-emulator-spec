@@ -58,6 +58,25 @@
           }
         }
       }
+    },
+    "boot": {
+      "type": "object",
+      "description": "镜像包内推荐引导配置。携带此字段的镜像在创建实例时可自动填充内核直启所需参数。",
+      "additionalProperties": false,
+      "properties": {
+        "kernel": {
+          "type": "string",
+          "description": "内核文件名，位于镜像包根目录。用于内核直启的 -kernel 参数。"
+        },
+        "initrd": {
+          "type": "string",
+          "description": "初始 ramdisk 文件名，位于镜像包根目录。用于内核直启的 -initrd 参数。"
+        },
+        "kernelAppend": {
+          "type": "string",
+          "description": "内核命令行骨架字符串，推荐包含 root=、quiet、nomodeset 等关键参数。用于内核直启的 -append 参数。"
+        }
+      }
     }
   }
 }
