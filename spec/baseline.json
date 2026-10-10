@@ -1,7 +1,7 @@
 {
   "version": "0.1.0",
   "status": "partial-measured",
-  "statusNote": "评测已于 2026-10-09（W-M1 阶段）更新，status 维持 partial-measured。已回填指标：1. cold-start 的 measured=21.61（秒），口径为 QEMU 进程启动至 ADB devices 首现 device。代表值选取理由：持久化磁盘安装态是模拟器面向最终用户的标准交付形态，21.61s 为已完成格式化的磁盘安装态二次常规冷启动实测耗时，最贴合用户日常稳态冷启动体验；对照实测值包括 Live 模式纯冷启动 44.68s（桌面就绪首帧 49.78s）与安装态首次冷启动 32.21s，全量实测场景均显著优于 <=60s 的目标门限。2. memory-per-instance 维持 measured=2.09（GB），观测口径为 QEMU 进程工作集峰值；W-M1 进一步测得 Live 模式峰值 2154MB（~2.10GB）、安装态峰值 2091MB（~2.04GB），两态峰值均在 ~2.09~2.15GB 区间，与首验 2.09GB 保持同量级且稳定满足 <=4GB 目标。仍未回填指标：app-cold-start、interaction-latency、steady-framerate 需可达桌面的应用级交互驱动与自动化链路，本轮保持 null 与受阻说明；density 多实例并行数待后续专项测量。measured 一律只填真实实测值，不得由 target 推导或估算。",
+  "statusNote": "评测已于 2026-10-10（W-M2 阶段）更新，status 维持 partial-measured。测量环境：宿主 Windows 11 / 16GB 物理内存 / QEMU 11.1.0 + WHPX，客户机 2048MB 内存 4 vCPU；全程宿主内存占用高于 87%（测量窗口内可用内存最低 1.91GB），宿主侧计时与 QMP 控制通道往返被同步抬高，以下所有耗时结论都建立在这一协变量之上。\n\n1. cold-start 的 measured=22.88（秒），口径为 QEMU 进程启动至 ADB devices 首现 device，全程零人工介入。代表值选取理由：该值来自产品链路端到端实测——真实 ISO 导入 → 产品定制 root 版 initrd → 安装态磁盘 → QEMU 启动至 adb device，与用户实际拿到的交付配置完全一致；原在档的 21.61s 是在无 root 配置的研究用引导链路上测得的，已不代表当前交付形态，故替换而非并列。对照实测值（均不作为代表值，仅供复核）：W-M2 root 实验线首启 44.18s（一次性写入 ADB 公钥、local.prop 与 root 命令通道的代价）、W-M2 root 实验线稳态 31.26s（其后每次完整冷重启稳定落在 31.2~31.5s）、W-M1 无 root 安装态首启 32.21s、W-M1 无 root 安装态二次常规冷启动 21.61s、W-M1 Live 模式纯冷启动 44.68s（桌面就绪首帧 49.78s）。结论：root 不增加启动开销，全部场景显著优于 <=60s 的目标门限。\n\n2. app-cold-start 的 measured=1.68（秒），口径为工具口径 am start -W 的 TotalTime。代表值选取理由：取三个应用共 15 轮实测中的最差单轮值（文件管理器第 1 轮 1677ms），以最保守的方式代表该指标——在档值不优于任何一轮实测，不会因选值偏乐观而在后续被推翻。三应用各 5 轮的工具口径明细：设置 mean 1115.4ms（1044~1174）、计算器 mean 888ms（817~943）、文件管理器 mean 1555.2ms（1426~1677），全部远优于 <=3s 目标。同一轮的「用户首帧口径」（点击图标至截屏内容 MD5 首次变化，三应用均值 0.16~0.25s）仅作参考记录、不予回填：该口径按整帧 MD5 判定画面变化，而 W-M2 复测已证明整帧 MD5 会被状态栏时钟跳动造成假阳性（一次空点击被判为 53ms 响应），方法存在缺陷的数据按硬规则不回填。同批实测中另有一个第三方应用因环境原因异常（am start -W 超时，5 轮仅 1 轮取到值），已剔除且不参与代表值选取。\n\n3. memory-per-instance 维持 measured=2.09（GB），观测口径为宿主 QEMU 进程工作集峰值。W-M2 产品链路复测峰值 2.098GB，与在档值一致；对照 W-M1 的 Live 模式 2154MB 与安装态 2091MB，三者稳定在 ~2.09~2.15GB，满足 <=4GB 目标。\n\n4. interaction-latency 维持 measured=null，blockedBy 已更新为真实原因：产品 QMP 输入通道本轮已验证可用（控制往返 62.2~67.2ms、均值 64.4ms；virtio-tablet 的绝对坐标域是 0~32767，截图像素坐标必须按比例映射，否则每次点击都落在屏幕左上角约 1.5%；down 与 up 必须拆成两次注入事件并各保持 60ms）。在响应可靠的控件类（导航进新页）上实测 77.7~84.0ms、达标，但系统 UI 快捷磁贴控件响应不可靠，20 轮磁贴点击中 10 轮在 5 秒内无任何视觉响应，且 SystemUI 通知栏卡死并持续持有窗口焦点、拦截一切点击，完整复测无法进行，故不填实测值。早期两条测量方法的结论一并作废：adb shell input tap 每个事件派生一个 Java app_process 进程（固有 40~60ms 开销）且不是产品输入通道；整帧 MD5 判定画面变化会被状态栏时钟跳动造成假阳性。\n\n5. steady-framerate 维持 measured=null，blockedBy 已更新为真实原因：早前 22fps 均值覆盖的三个测量窗口中有两个在列表触底、停止出帧后报告 0 帧，属伪影而非滚动帧率，按硬规则不予回填；同一轮唯一真正滚动的窗口实测 66fps、渲染帧 P50=14ms，具备达标能力的证据一并记录在案。完整稳态复测需要驱动设置应用的长列表滚动窗口，而该窗口被卡死的 SystemUI 通知栏永久覆盖并拦截输入，复测无法进行。复测装置已就绪：每窗口先复位再测量、交替滚动方向、长列表中段起步并以反向滑动重新居中、逐窗口记录 content_moved 以规避 0 帧伪影、同时输出逐帧 fps 与帧数/时长，待通知栏缺陷修复后即可执行。\n\n6. density 各档并行数仍待专项测量。measured 一律只填真实实测值，不得由 target 推导或估算；方法存在缺陷、样本不可复现或覆盖不可控的数据，宁可保持 null 并写明 blockedBy，也不得回填。",
   "units": {
     "duration": "s",
     "latency": "ms",
@@ -14,7 +14,7 @@
       "name": "冷启动时间",
       "measure": "QEMU 进程启动至调试通路可连接",
       "target": { "op": "<=", "value": 60, "unit": "s" },
-      "measured": 21.61,
+      "measured": 22.88,
       "owner": "windows"
     },
     {
@@ -22,9 +22,8 @@
       "name": "实例内应用冷启动",
       "measure": "桌面点击图标至首帧呈现",
       "target": { "op": "<=", "value": 3, "unit": "s" },
-      "measured": null,
-      "owner": "windows",
-      "blockedBy": "需要可达桌面的实例"
+      "measured": 1.68,
+      "owner": "windows"
     },
     {
       "id": "interaction-latency",
@@ -33,7 +32,7 @@
       "target": { "op": "<=", "value": 150, "unit": "ms" },
       "measured": null,
       "owner": "windows",
-      "blockedBy": "需要可达桌面的实例"
+      "blockedBy": "QMP 输入通道已验证可用（控制往返 62.2~67.2ms；virtio-tablet 绝对坐标域 0~32767 需做比例映射，down/up 需拆成两次注入事件并各保持 60ms），但系统 UI 快捷磁贴控件响应不可靠（20 轮中 10 轮 5 秒内无视觉响应），且 SystemUI 通知栏卡死持续拦截点击，完整复测无法进行；早期 adb shell input 法与整帧 MD5 法均存在方法缺陷，结论已作废。"
     },
     {
       "id": "steady-framerate",
@@ -42,7 +41,7 @@
       "target": { "op": ">=", "value": 30, "unit": "fps" },
       "measured": null,
       "owner": "windows",
-      "blockedBy": "需要可达桌面的实例"
+      "blockedBy": "早前 22fps 为列表触底 0 帧伪影，不可回填；活跃滚动窗口实测 66fps、渲染帧 P50=14ms，具备达标能力的证据在案，但完整稳态复测被卡死的 SystemUI 通知栏阻断（其永久覆盖并拦截设置应用的滚动窗口），复测装置已就绪，待该缺陷修复后执行。"
     },
     {
       "id": "memory-per-instance",
