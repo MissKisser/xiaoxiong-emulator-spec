@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "proj-win-main-01-0001",
+  "instanceRef": "win-main-01",
+  "video": {
+    "width": 1280,
+    "height": 720
+  },
+  "state": "pending"
+}

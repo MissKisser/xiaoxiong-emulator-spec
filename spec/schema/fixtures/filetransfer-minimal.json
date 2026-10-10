@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "ft-win-main-01-0001",
+  "instanceRef": "win-main-01",
+  "direction": "host-to-instance",
+  "paths": {
+    "source": "D:\\Downloads\\module.zip",
+    "target": "/data/local/tmp/module.zip"
+  },
+  "overwrite": "overwrite",
+  "state": "queued",
+  "createdAt": "2026-10-10T09:40:00+08:00"
+}

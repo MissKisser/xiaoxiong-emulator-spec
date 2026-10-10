@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "packageName": "com.example.handyplayer",
+  "instanceRef": "win-main-01",
+  "installState": "installed",
+  "versionName": "3.8.2",
+  "versionCode": 30802,
+  "primaryCpuAbi": "arm64-v8a",
+  "installedAt": "2026-10-09T21:14:07+08:00",
+  "launchActivity": ".MainActivity",
+  "source": {
+    "fileName": "HandyPlayer_3.8.2_arm64-v8a.apk",
+    "sha256": "d92afb631d2d75e9d54cba06846809136e383292ecf5f7deec1d15516160e6d0",
+    "sizeBytes": 48213904
+  },
+  "lastOperation": {
+    "schemaVersion": "1.0.0",
+    "id": "appop-win-main-01-0007",
+    "instanceRef": "win-main-01",
+    "operation": "install",
+    "packageName": "com.example.handyplayer",
+    "result": "success",
+    "occurredAt": "2026-10-09T21:14:07+08:00",
+    "durationMs": 8420
+  }
+}

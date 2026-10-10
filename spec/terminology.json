@@ -1,117 +1,394 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "terms": [
     {
       "id": "instance",
       "zh": "实例",
       "en": "instance",
       "meaning": "一个独立可运行的 Android 环境，拥有自己的数据、标识与生命周期",
-      "forbidden": ["模拟器实例", "虚拟机实例", "分身"]
+      "forbidden": [
+        "模拟器实例",
+        "虚拟机实例",
+        "分身"
+      ]
     },
     {
       "id": "image",
       "zh": "镜像",
       "en": "image",
       "meaning": "用于创建实例的 Android 系统模板",
-      "forbidden": ["系统镜像", "ROM 包", "安装包"]
+      "forbidden": [
+        "系统镜像",
+        "ROM 包",
+        "安装包"
+      ]
     },
     {
       "id": "root",
       "zh": "Root 权限",
       "en": "root",
       "meaning": "实例内的管理员权限，Windows 端为真 root，Android 端为容器内 root",
-      "forbidden": ["免 root", "超级用户权限"]
+      "forbidden": [
+        "免 root",
+        "超级用户权限"
+      ]
     },
     {
       "id": "exposure",
       "zh": "暴露级别",
       "en": "exposure",
       "meaning": "实例端口对外可达的范围，分 loopback / lan / public 三级",
-      "forbidden": ["网络模式", "端口模式"]
+      "forbidden": [
+        "网络模式",
+        "端口模式"
+      ]
     },
     {
       "id": "input-channel",
       "zh": "输入通道",
       "en": "input channel",
       "meaning": "向实例投递触摸与按键的通路，分原生输入与投屏",
-      "forbidden": ["控制方式", "操控模式", "输入方式"]
+      "forbidden": [
+        "控制方式",
+        "操控模式",
+        "输入方式"
+      ]
     },
     {
       "id": "fidelity",
       "zh": "保真度",
       "en": "fidelity",
       "meaning": "实例在系统能力与运行特征上接近真机的程度",
-      "forbidden": ["仿真度", "拟真度", "还原度"]
+      "forbidden": [
+        "仿真度",
+        "拟真度",
+        "还原度"
+      ]
     },
     {
       "id": "startup",
       "zh": "启动",
       "en": "start",
       "meaning": "将实例从停止态转为运行态",
-      "forbidden": ["开机", "启动虚拟机", "唤醒"]
+      "forbidden": [
+        "开机",
+        "启动虚拟机",
+        "唤醒"
+      ]
     },
     {
       "id": "stop",
       "zh": "停止",
       "en": "stop",
       "meaning": "将实例从运行态转为停止态，保留数据",
-      "forbidden": ["关机", "关闭虚拟机", "挂起"]
+      "forbidden": [
+        "关机",
+        "关闭虚拟机",
+        "挂起"
+      ]
     },
     {
       "id": "error-environment",
       "zh": "宿主环境错误",
       "en": "EnvironmentError",
       "meaning": "宿主不满足运行前提，例如虚拟化组件缺失或未启用。必须在启动前拦截并给出修复指引",
-      "forbidden": ["环境不支持", "宿主问题", "配置不兼容"]
+      "forbidden": [
+        "环境不支持",
+        "宿主问题",
+        "配置不兼容"
+      ]
     },
     {
       "id": "error-provider",
       "zh": "虚拟化实现错误",
       "en": "ProviderError",
       "meaning": "虚拟化实现内部失败。记录日志，实例转为 failed，允许重试",
-      "forbidden": ["环境不支持", "宿主问题", "配置不兼容", "引擎错误", "底层故障"]
+      "forbidden": [
+        "环境不支持",
+        "宿主问题",
+        "配置不兼容",
+        "引擎错误",
+        "底层故障"
+      ]
     },
     {
       "id": "error-guest",
       "zh": "实例内错误",
       "en": "GuestError",
       "meaning": "实例内出现问题，例如系统未启动或调试通路未就绪。超时后转为 failed 并保留日志",
-      "forbidden": ["实例内异常", "来宾错误", "系统错误"]
+      "forbidden": [
+        "实例内异常",
+        "来宾错误",
+        "系统错误"
+      ]
     },
     {
       "id": "error-user",
       "zh": "配置错误",
       "en": "UserError",
       "meaning": "配置本身非法，例如磁盘空间不足、镜像不存在、端口被占用。立即返回，不进入 failed 态",
-      "forbidden": ["用户错误", "参数错误", "非法参数", "设置有误"]
+      "forbidden": [
+        "用户错误",
+        "参数错误",
+        "非法参数",
+        "设置有误"
+      ]
     },
     {
       "id": "snapshot",
       "zh": "快照",
       "en": "snapshot",
       "meaning": "在实例停止态对磁盘链做的可回退副本",
-      "forbidden": ["备份点", "存档", "克隆"]
+      "forbidden": [
+        "备份点",
+        "存档",
+        "克隆"
+      ]
     },
     {
       "id": "projection",
       "zh": "投屏",
       "en": "projection",
       "meaning": "把实例画面实时呈现到宿主窗口。与输入通道是两个概念：投屏负责看，输入通道负责操控",
-      "forbidden": ["镜像投射", "画面同步", "串流"]
+      "forbidden": [
+        "镜像投射",
+        "画面同步",
+        "串流"
+      ]
     },
     {
       "id": "file-transfer",
       "zh": "文件传输",
       "en": "file transfer",
       "meaning": "在宿主与实例之间双向复制文件",
-      "forbidden": ["文件共享", "文件同步", "上传下载"]
+      "forbidden": [
+        "文件共享",
+        "文件同步",
+        "上传下载"
+      ]
     },
     {
       "id": "diagnostics",
       "zh": "诊断包",
       "en": "diagnostics bundle",
       "meaning": "一键导出的现场材料，用于自助排查与社区求助。导出前必须让用户预览将包含的内容",
-      "forbidden": ["日志包", "导出日志", "调试文件"]
+      "forbidden": [
+        "日志包",
+        "导出日志",
+        "调试文件"
+      ]
+    },
+    {
+      "id": "resolution",
+      "zh": "分辨率",
+      "en": "resolution",
+      "meaning": "实例呈现画面的宽高，单位像素",
+      "forbidden": [
+        "屏幕尺寸",
+        "清晰度",
+        "画质"
+      ]
+    },
+    {
+      "id": "density",
+      "zh": "像素密度",
+      "en": "pixel density",
+      "meaning": "每英寸像素数，决定界面元素与文字的物理尺寸",
+      "forbidden": [
+        "分辨率",
+        "清晰度"
+      ]
+    },
+    {
+      "id": "orientation",
+      "zh": "屏幕方向",
+      "en": "orientation",
+      "meaning": "实例画面的横竖朝向，分横屏/竖屏/跟随宿主",
+      "forbidden": [
+        "旋转角度",
+        "朝向角"
+      ]
+    },
+    {
+      "id": "projection-session",
+      "zh": "投屏会话",
+      "en": "projection session",
+      "meaning": "一次投屏从建立到终止的完整过程，每次重连都是新会话",
+      "forbidden": [
+        "投屏窗口",
+        "投屏连接",
+        "画面通道"
+      ]
+    },
+    {
+      "id": "frame-rate",
+      "zh": "帧率",
+      "en": "frame rate",
+      "meaning": "单位 fps，目标帧率与实测帧率分列，实测只登记真实观测",
+      "forbidden": [
+        "帧数",
+        "流畅度",
+        "刷新率"
+      ]
+    },
+    {
+      "id": "pointer-coordinate-domain",
+      "zh": "指针坐标域",
+      "en": "pointer coordinate domain",
+      "meaning": "投递指针事件时使用的坐标取值空间，分绝对值域与归一化域",
+      "forbidden": [
+        "坐标缩放",
+        "鼠标坐标范围"
+      ]
+    },
+    {
+      "id": "input-device-kind",
+      "zh": "输入设备类型",
+      "en": "input device kind",
+      "meaning": "投屏会话承载的指针或键盘，与投递通路是两个维度",
+      "forbidden": [
+        "输入方式",
+        "控制方式",
+        "操控模式"
+      ]
+    },
+    {
+      "id": "module",
+      "zh": "模块",
+      "en": "module",
+      "meaning": "以 ZIP 包分发的系统增强单元，安装到实例内指定目录后由引导期加载器叠加其 system 子树并按序执行阶段脚本",
+      "forbidden": [
+        "插件",
+        "扩展包",
+        "脚本包"
+      ]
+    },
+    {
+      "id": "module-install",
+      "zh": "安装模块",
+      "en": "install module",
+      "meaning": "校验 ZIP 包结构并把模块目录落到实例内的操作",
+      "forbidden": [
+        "刷模块",
+        "推送模块"
+      ]
+    },
+    {
+      "id": "module-uninstall",
+      "zh": "卸载模块",
+      "en": "uninstall module",
+      "meaning": "删除实例内的模块目录，模块文件不再存在",
+      "forbidden": [
+        "删除插件",
+        "移除扩展"
+      ]
+    },
+    {
+      "id": "module-manifest",
+      "zh": "模块清单",
+      "en": "module manifest",
+      "meaning": "module.prop 中供两端读取与展示的字段集合",
+      "forbidden": [
+        "模块信息",
+        "模块配置"
+      ]
+    },
+    {
+      "id": "stage-script",
+      "zh": "阶段脚本",
+      "en": "stage script",
+      "meaning": "模块根目录下按固定顺序执行的脚本，名字只有三种",
+      "forbidden": [
+        "启动脚本",
+        "引导脚本",
+        "钩子脚本"
+      ]
+    },
+    {
+      "id": "system-overlay",
+      "zh": "系统叠加",
+      "en": "system overlay",
+      "meaning": "把模块 system 子树内的文件覆盖到系统同名文件上",
+      "forbidden": [
+        "注入",
+        "挂载覆盖"
+      ]
+    },
+    {
+      "id": "disable-marker",
+      "zh": "禁用标记",
+      "en": "disable marker",
+      "meaning": "模块目录根部表示该模块不参与下次引导的文件",
+      "forbidden": [
+        "禁用开关",
+        "停用标志"
+      ]
+    },
+    {
+      "id": "transfer-task",
+      "zh": "传输任务",
+      "en": "transfer task",
+      "meaning": "一次宿主与实例之间的文件复制，从发起到终态的完整记录",
+      "forbidden": [
+        "传输会话",
+        "上传任务",
+        "下载任务"
+      ]
+    },
+    {
+      "id": "conflict-policy",
+      "zh": "冲突策略",
+      "en": "conflict policy",
+      "meaning": "目标已存在同名项时的处置方式",
+      "forbidden": [
+        "覆盖策略",
+        "重传策略"
+      ]
+    },
+    {
+      "id": "application",
+      "zh": "应用",
+      "en": "application",
+      "meaning": "安装在实例内的 Android 应用程序包及其运行实体",
+      "forbidden": [
+        "程序",
+        "App",
+        "软件",
+        "插件"
+      ]
+    },
+    {
+      "id": "app-launch",
+      "zh": "拉起应用",
+      "en": "launch application",
+      "meaning": "把已安装的应用切换到前台运行；「启动」一词专属于实例从停止态转为运行态",
+      "forbidden": [
+        "启动应用",
+        "打开应用",
+        "唤醒应用"
+      ]
+    },
+    {
+      "id": "apk-file",
+      "zh": "应用包",
+      "en": "APK file",
+      "meaning": "Android 应用的安装分发文件",
+      "forbidden": [
+        "安装包",
+        "安装文件",
+        "apk 安装包"
+      ]
+    },
+    {
+      "id": "install-state",
+      "zh": "安装状态",
+      "en": "install state",
+      "meaning": "应用在实例内已安装或未安装的可观测状态",
+      "forbidden": [
+        "装没装",
+        "安装情况",
+        "部署状态"
+      ]
     }
   ]
 }

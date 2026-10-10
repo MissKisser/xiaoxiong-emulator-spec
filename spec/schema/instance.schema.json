@@ -88,6 +88,21 @@
         "imei":      { "type": "string", "minLength": 14, "maxLength": 16 }
       }
     },
+    "display": {
+      "type": "object",
+      "description": "实例的显示设置。缺省时由平台按镜像的显示能力选型；分辨率、像素密度与方向在实例运行期间不可改，改动后需下次启动生效。",
+      "required": ["width", "height"],
+      "properties": {
+        "width":  { "type": "integer", "minimum": 1, "maximum": 7680, "description": "画面宽度，单位像素" },
+        "height": { "type": "integer", "minimum": 1, "maximum": 4320, "description": "画面高度，单位像素" },
+        "dpi":    { "type": "integer", "minimum": 72, "maximum": 1280, "description": "像素密度，单位 dpi。缺省时由平台按镜像的显示能力选型" },
+        "orientation": {
+          "enum": ["landscape", "portrait", "auto"],
+          "default": "auto",
+          "description": "屏幕方向。landscape = 横屏，portrait = 竖屏，auto = 跟随宿主系统方向"
+        }
+      }
+    },
     "platformConfig": {
       "type": "object",
       "description": "平台特有字段逃生舱，通用 Schema 只保证其为 object，不解析内部结构",

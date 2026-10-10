@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "proj-win-main-01-0002",
+  "instanceRef": "win-main-01",
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": {
+      "target": 30,
+      "measured": 28.4
+    }
+  },
+  "input": {
+    "channel": "native",
+    "devices": ["pointer", "keyboard"],
+    "pointer": {
+      "domain": "absolute",
+      "max": 32767
+    },
+    "keyboard": {
+      "layout": "linux-evdev"
+    }
+  },
+  "state": "active",
+  "startedAt": "2026-10-10T10:12:00+08:00",
+  "endedAt": null,
+  "platformConfig": {
+    "frameSource": "qmp-screendump",
+    "frameIntervalMs": 33,
+    "inputControl": "qmp-input-send-event",
+    "note": "单帧抓取约 9.6ms，取帧节奏受此上界约束；指针按画面分辨率线性映射到 0..32767 后投递，按下与抬起拆为两个独立事件"
+  }
+}

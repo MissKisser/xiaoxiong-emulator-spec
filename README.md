@@ -53,16 +53,28 @@ spec/
 │  ├─ README.md                 图标清单、用途与适用场景
 │  └─ *.svg                     实例、快照、镜像、交互、传输、状态与风险类图标
 └─ schema/
-   ├─ instance.schema.json      实例配置契约
-   ├─ image.schema.json         镜像清单契约
+   ├─ instance.schema.json      实例配置契约（含 display 显示设置）
+   ├─ image.schema.json         镜像清单契约（含 boot 推荐引导配置）
    ├─ snapshot.schema.json      快照元数据契约
+   ├─ projection.schema.json    投屏会话契约
+   ├─ filetransfer.schema.json  文件传输任务契约
+   ├─ module.schema.json        模块清单与安装状态契约
+   ├─ application.schema.json   应用管理契约
    ├─ terminology.schema.json   术语表结构定义
    └─ fixtures/                 双向兼容测试样例
       ├─ instance.windows.json  Windows 端样例
       ├─ instance.android.json  Android 端样例
       ├─ image.json             镜像样例
       ├─ snapshot-minimal.json  快照样例（仅必填字段）
-      └─ snapshot-full.json     快照样例（覆盖全部可选字段）
+      ├─ snapshot-full.json     快照样例（覆盖全部可选字段）
+      ├─ projection-minimal.json 投屏样例（仅必填字段）
+      ├─ projection-full.json   投屏样例（覆盖全部可选字段）
+      ├─ filetransfer-minimal.json 传输样例（仅必填字段）
+      ├─ filetransfer-full.json 传输样例（覆盖全部可选字段）
+      ├─ module-minimal.json    模块样例（仅必填字段）
+      ├─ module-full.json       模块样例（覆盖全部可选字段）
+      ├─ application-minimal.json 应用样例（仅必填字段）
+      └─ application-full.json  应用样例（覆盖全部可选字段）
 ```
 
 ## 两端如何引用

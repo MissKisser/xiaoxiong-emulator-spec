@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "zygisk_next",
+  "instanceRef": "win-main-01",
+  "remotePath": "/data/adb/modules/zygisk_next",
+  "manifest": {
+    "id": "zygisk_next",
+    "name": "Zygisk Next",
+    "version": "0.8.0",
+    "author": "Dr-TSNG",
+    "description": "把 Zygisk 注入实现内置进 initramfs，以模块形态分发",
+    "versionCode": 800
+  },
+  "layout": {
+    "systemOverlay": true,
+    "stageScripts": ["post-fs-data.sh", "service.sh"]
+  },
+  "install": {
+    "state": "enabled",
+    "installedAt": "2026-10-10T09:12:00+08:00",
+    "sourceZip": "zygisk-next-0.8.0.zip"
+  },
+  "platformConfig": {
+    "adbPort": 15555
+  }
+}

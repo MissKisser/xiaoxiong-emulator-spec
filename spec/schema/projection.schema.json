@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XBearProjection",
+  "description": "投屏会话。描述一次投屏的可观测行为：呈现了什么画面、按什么节奏呈现、承载哪些输入、处于生命周期的哪一态。刻意不绑定取流与注入的实现方式，取帧是走 VNC 还是帧缓冲抓取、注入走哪条控制通道均由各端自选，实现差异只允许写进 platformConfig 逃生舱。",
+  "type": "object",
+  "required": ["schemaVersion", "id", "instanceRef", "video", "state"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "投屏契约自身的版本。与 spec/version.json 的 spec.version 同源，改动本契约的可解析内容时必须同步递增。"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "description": "投屏会话的全局唯一标识。同一个实例先后建立的多次投屏不得复用同一标识，会话结束后标识进墓碑记录不得自动复用。"
+    },
+    "instanceRef": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "description": "被投屏实例的标识，引用 instance.schema.json 中的 id。投屏要求实例处于运行态，实例停止时该会话随即终止；实例删除后该引用不再可解析。"
+    },
+    "video": {
+      "type": "object",
+      "description": "呈现画面的语义。这是投屏会话唯一不可省略的部分：一份说不清呈现了多大画面的投屏会话无法验收。",
+      "required": ["width", "height"],
+      "additionalProperties": false,
+      "properties": {
+        "width":  { "type": "integer", "minimum": 1, "maximum": 7680, "description": "呈现画面的宽度，单位像素。与实例 display 的分辨率一致时表示按原生分辨率直呈，不一致时表示按实例分辨率取帧后缩放呈现" },
+        "height": { "type": "integer", "minimum": 1, "maximum": 4320, "description": "呈现画面的高度，单位像素" },
+        "fps": {
+          "type": "object",
+          "description": "呈现节奏。目标与实测分列，沿用 baseline.json 的同一条规矩：目标只声明意图，实测只登记真实观测，两者不得互相推导。",
+          "required": ["target", "measured"],
+          "additionalProperties": false,
+          "properties": {
+            "target": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 240,
+              "description": "目标帧率，单位 fps。取帧与呈现按此节奏推进，只声明意图，不作为验收依据。"
+            },
+            "measured": {
+              "type": ["number", "null"],
+              "minimum": 0,
+              "maximum": 1000,
+              "description": "实测帧率，单位 fps。只能来自真实观测，禁止由 target 推导或估算；尚未开始投屏或未测量时保持 null，不得用 0 或默认值占位。"
+            }
+          }
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "description": "本会话承载的输入语义。缺省表示这份投屏只看不送输入。投屏与输入通道是两个概念：投屏负责看，输入通道负责操控，二者彼此独立，投屏会话建立与否不决定输入通道是否可用。",
+      "additionalProperties": false,
+      "properties": {
+        "channel": {
+          "enum": ["native", "scrcpy", "none"],
+          "description": "输入投递所走的通道，取值域与 image.schema.json 的 verified.inputChannel 保持一致。native = 原生输入，scrcpy = 经投屏注入，none = 本会话不投递输入。"
+        },
+        "devices": {
+          "type": "array",
+          "items": { "enum": ["pointer", "keyboard"] },
+          "uniqueItems": true,
+          "description": "本会话承载的输入设备类型。pointer = 指针，涵盖触摸与鼠标；keyboard = 键盘。与 channel 是两个维度：channel 说清投递通路，devices 说清承载什么设备。"
+        },
+        "pointer": {
+          "type": "object",
+          "description": "指针的坐标与事件约定。",
+          "additionalProperties": false,
+          "properties": {
+            "domain": {
+              "enum": ["absolute", "normalized"],
+              "description": "指针坐标域。absolute = 设备原生绝对坐标域，取值 0..max，宿主须按当前画面分辨率线性映射到该域后再投递，不得直接投递像素坐标；normalized = 归一化坐标域，取值 0..1，由接收端按画面分辨率换算。两端必须从同一份会话描述上取得一致结论，任一端不得私自换算。"
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "坐标域上界，仅 domain=absolute 时有意义。virtio-tablet 的绝对坐标域上界为 32767，即取值 0..32767；取其他上界时须是投递端与接收端共同支持的实际域。"
+            }
+          }
+        },
+        "keyboard": {
+          "type": "object",
+          "description": "按键映射的约定。按下与抬起必须成对投递为两个独立事件，不得合并为一次事件，否则实例内的按键状态会与宿主侧脱节；修饰键同样以独立事件投递，不与主键合并。",
+          "additionalProperties": false,
+          "properties": {
+            "layout": {
+              "enum": ["usb-hid", "linux-evdev"],
+              "description": "按键编码表。linux-evdev = Linux 输入事件码（KEY_*、BTN_* 等），与实例内核的按键驱动一致；usb-hid = USB HID 用码。两端必须约定同一张编码表；编码表本身不入契约，由各端按 layout 自行解析。"
+            }
+          }
+        }
+      }
+    },
+    "state": {
+      "enum": ["pending", "active", "stopped"],
+      "description": "投屏会话状态。pending = 会话已建立但尚未开始取帧，画面不可见；active = 正在呈现画面；stopped = 会话已终止，画面不再更新。状态只能沿 pending → active → stopped 单向推进，不得回退，重新投屏必须新建会话。实例停止时处于 active 的会话自动转 stopped。"
+    },
+    "startedAt": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+      "description": "首次进入 active 的时刻，必须带时区偏移，两端据此换算为各自时区展示。仍处于 pending 时为 null。"
+    },
+    "endedAt": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+      "description": "进入 stopped 的时刻，必须带时区偏移。仍处于 pending 或 active 时为 null。"
+    },
+    "platformConfig": {
+      "type": "object",
+      "description": "平台特有字段逃生舱。Windows 端记录取帧通路与注入通路（例如帧取自逐帧抓取还是长连接流、输入经由何种控制通道注入）及其单帧开销，Android 端记录容器侧的呈现通路。通用 Schema 只保证其为 object，不解析内部结构。"
+    }
+  }
+}

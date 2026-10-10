@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "win-main-01",
   "displayName": "主力实例",
   "platform": "windows",
@@ -26,6 +26,12 @@
     "serialNo": "WB1A19F30001X7",
     "androidId": "a3f9c2e17b8d4056",
     "imei": "861234567890123"
+  },
+  "display": {
+    "width": 1920,
+    "height": 1080,
+    "dpi": 240,
+    "orientation": "landscape"
   },
   "platformConfig": {
     "accelerator": "whpx",

@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XBearModule",
+  "description": "模块清单与安装状态契约。一份文档描述单个实例内的单个已安装模块：标识与引用、模块清单（module.prop 的最小字段）、模块内结构约定与安装记录。宿主侧持有，Windows 端与 Android 端共用；平台特有字段置于 platformConfig 逃生舱。模块目录恒位于实例内的 /data/adb/modules/<id>，引导期模块加载器扫描该目录，把各模块的 system/ 子树叠加进系统并按固定顺序执行阶段脚本。",
+  "type": "object",
+  "required": ["schemaVersion", "id", "instanceRef", "install"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "模块契约自身的版本。与 spec/version.json 的 spec.version 同源，改动本契约的可解析内容时必须同步递增。"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^(?!\\.)(?!.*\\.\\.)[A-Za-z0-9._-]{1,255}$",
+      "description": "模块标识，恒等于模块目录名。只允许 ASCII 字母、数字、点、下划线与连字符；不得以点开头，不得含连续的点。除此之外不设首字符限制，以下划线或连字符开头的标识同样合法。标识直接进入实例内路径并拼进宿主下发的命令，这三条约束是防路径穿越与命令注入的底线，与 Windows 端已实现的校验逐条一致。长度上限 255 与实例内目录名的存储上限一致。module.prop 声明了 id 时取该声明值，未声明时取来源 ZIP 的文件名（不含扩展名），校验规则不变；两端按本约束校验的是归一化后的标识。"
+    },
+    "instanceRef": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "description": "所属实例的标识，引用 instance.schema.json 中的 id。模块随实例一同销毁，实例删除后该引用不再可解析。"
+    },
+    "remotePath": {
+      "type": "string",
+      "pattern": "^/data/adb/modules/(?!\\.)(?!.*\\.\\.)[A-Za-z0-9._-]{1,255}$",
+      "description": "模块在实例内的目录路径，恒等于 /data/adb/modules/ 加 id，末段与 id 适用同一套约束。模块根目录是两端共享的常量，不得各自更改。"
+    },
+    "manifest": {
+      "type": "object",
+      "description": "模块清单，即 module.prop 的最小字段集合。仅凭 system/ 子树安装、未携带 module.prop 的模块不带本对象。module.prop 属于外部生态格式，允许出现本契约未列出的额外键，两端只约束这里声明的五个字段。",
+      "required": ["id", "name", "version", "author", "description"],
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(?!\\.)(?!.*\\.\\.)[A-Za-z0-9._-]{1,255}$",
+          "description": "清单声明的模块标识，必须与本对象顶层的 id 相同；顶层 id 即由该字段解析而来，module.prop 未声明时改取来源 ZIP 文件名。"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "模块名，供用户在模块列表中辨认，不得为空。"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "模块版本字符串。允许带上游生态的非语义化版本写法，契约不解析其结构，只要求非空以便与后续版本区分。"
+        },
+        "author": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "模块作者署名。可为空串：不少模块包不填作者，契约不为此拒收。"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 512,
+          "description": "模块说明文本。可为空串，只作展示用，不参与任何判定。"
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "description": "模块内结构约定。加载器只按目录名、system/ 子树与阶段脚本这三样生效，三样都缺的模块装上也不会被加载，属于无效输入，安装时应直接拒绝而不是留下一个永远不生效的目录。",
+      "additionalProperties": false,
+      "properties": {
+        "systemOverlay": {
+          "type": "boolean",
+          "description": "模块是否携带 system/ 子树。为 false 时加载器不叠加任何文件，模块只能靠阶段脚本生效；为 true 时子树内的文件覆盖系统同名文件，覆盖发生在每次引导的启动阶段。"
+        },
+        "stageScripts": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["post-fs-data.sh", "service.sh", "boot-completed.sh"]
+          },
+          "description": "模块内实际存在的阶段脚本名。加载器按 post-fs-data.sh → service.sh → boot-completed.sh 的固定顺序逐个执行，与数组本身的顺序无关；安装时已把存在的阶段脚本置为可执行，因此两端不必再各自处理脚本权限。脚本的绝对路径由加载器按模块目录拼接，模块不得依赖工作目录。"
+        }
+      }
+    },
+    "install": {
+      "type": "object",
+      "description": "安装记录。记录模块这份落盘状态的来源与生效判定，不描述安装过程本身。",
+      "required": ["state", "installedAt", "sourceZip"],
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "enum": ["installed", "enabled", "disabled"],
+          "description": "安装记录的状态。installed = 模块目录已落盘，但尚未在引导期的加载器中确认生效；enabled = 未被禁用，且携带 module.prop 或 system/ 子树，下一次引导会被加载器应用；disabled = 已被显式禁用，下一次引导必须跳过，模块目录保留不删。三个状态都是终态，不经引导不互相流转；安装与卸载是目录级操作，与 state 无关。禁用状态由模块目录根部的禁用标记文件表示，与 Magisk 生态的 disable 文件同名，两端写入与删除该标记即可，无需改动已装文件。"
+        },
+        "installedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+          "description": "模块文件全部落入实例内并完成刷盘的时刻，必须带时区偏移。卸载不写入本字段，卸载后该模块不再有记录。"
+        },
+        "sourceZip": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "^[^/\\\\]+$",
+          "description": "安装所用来源 ZIP 包的文件名，不含宿主目录路径，且不含目录分隔符。契约只记录文件名：宿主的目录布局不属于实例内事实，写进共享契约会让两端互相耦合。"
+        }
+      }
+    },
+    "platformConfig": {
+      "type": "object",
+      "description": "平台特有字段逃生舱。Windows 端可记录安装时所用的 adb 端口与宿主暂存位置，Android 端可记录容器侧路径。通用 Schema 只保证其为 object，不解析内部结构。"
+    }
+  }
+}
