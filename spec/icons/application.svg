@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="application-title">
+  <title id="application-title">应用</title>
+  <!-- 形态意图：四格应用矩阵读作实例内已安装的应用集合；左上、左下与右下以 Ink 描边呈现基础应用网格，右上以 Brand 墨绿强调读作当前受管与拉起的目标应用实体。与多开的并列三卡片及快照的纵向层叠形成清晰区隔，在 16 px 下仍具备稳定的方形重心与足够的留白间距 -->
+  <g fill="none" stroke="#1C1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3.5" y="3.5" width="6" height="6" rx="1.5" />
+    <rect x="3.5" y="14.5" width="6" height="6" rx="1.5" />
+    <rect x="14.5" y="14.5" width="6" height="6" rx="1.5" />
+  </g>
+  <rect x="14.5" y="3.5" width="6" height="6" rx="1.5" fill="#2E5C4A" stroke="#2E5C4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

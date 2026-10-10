@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="module-title">
+  <title id="module-title">模块</title>
+  <!-- 形态意图：带顶部连接榫与侧向卡槽的模块单元读作可插拔的系统增强单元，中心墨绿十字强调其为系统注入增强能力而非普通数据包。几何轮廓避免复杂曲线，保证在 16 px 缩放时榫槽边界依然清晰可辨 -->
+  <g fill="none" stroke="#1C1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4.5 7.5a2 2 0 0 1 2-2h3V3.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2h3a2 2 0 0 1 2 2v3h-2a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h2v3a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2z" />
+  </g>
+  <path d="M8 13h5M10.5 10.5v5" fill="none" stroke="#2E5C4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
