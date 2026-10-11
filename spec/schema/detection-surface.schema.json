@@ -3,7 +3,13 @@
   "title": "XBearDetectionSurface",
   "description": "检测面指标台账的形态定义。台账按检测面分层组织，每条指标是一次可复现的实例内检查：一条检测命令、一句期望结果、一个实测状态。它测的是「像不像真机」而不是「能不能用」，与 image.schema.json 的 verified.fidelity 是两个方向相反的度量，不可互相替代、不可互相推导。台账不是镜像准入门槛，未通过的指标只登记为已知暴露，不淘汰镜像。",
   "type": "object",
-  "required": ["version", "semantics", "execution", "groups", "fillPolicy"],
+  "required": [
+    "version",
+    "semantics",
+    "execution",
+    "groups",
+    "fillPolicy"
+  ],
   "additionalProperties": false,
   "properties": {
     "version": {
@@ -14,7 +20,12 @@
     "semantics": {
       "type": "object",
       "description": "指标语义的权威声明。方向、载体与处置三条必须写在这里，避免与保真度门槛混读。",
-      "required": ["subject", "stateDirection", "carrier", "admission"],
+      "required": [
+        "subject",
+        "stateDirection",
+        "carrier",
+        "admission"
+      ],
       "additionalProperties": false,
       "properties": {
         "subject": {
@@ -38,10 +49,16 @@
     "execution": {
       "type": "object",
       "description": "执行前提。指标命令在实例内执行，宿主侧只负责采集与比对。",
-      "required": ["scope", "placeholder"],
+      "required": [
+        "scope",
+        "placeholder"
+      ],
       "additionalProperties": false,
       "properties": {
-        "scope": { "type": "string", "description": "执行域。命令在实例内执行。" },
+        "scope": {
+          "type": "string",
+          "description": "执行域。命令在实例内执行。"
+        },
         "placeholder": {
           "type": "string",
           "description": "占位符写法。命令中的尖括号片段是宿主侧代入的实例实际值，不是命令字面量。"
@@ -54,15 +71,30 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "name", "metrics"],
+        "required": [
+          "id",
+          "name",
+          "metrics"
+        ],
         "additionalProperties": false,
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}$", "description": "指标组标识。" },
-          "name": { "type": "string", "minLength": 1, "maxLength": 32, "description": "指标组名称，即所测的检测面。" },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{1,31}$",
+            "description": "指标组标识。"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "description": "指标组名称，即所测的检测面。"
+          },
           "metrics": {
             "type": "array",
             "minItems": 1,
-            "items": { "$ref": "#/$defs/metric" }
+            "items": {
+              "$ref": "#/$defs/metric"
+            }
           }
         }
       }
@@ -71,14 +103,25 @@
       "type": "array",
       "description": "状态回填纪律。",
       "minItems": 1,
-      "items": { "type": "string", "minLength": 1 }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     }
   },
   "$defs": {
     "metric": {
       "type": "object",
       "description": "单条检测面指标。",
-      "required": ["id", "name", "auditRefs", "command", "expected", "status", "reverseFunctional"],
+      "required": [
+        "id",
+        "name",
+        "auditRefs",
+        "command",
+        "expected",
+        "status",
+        "reverseFunctional"
+      ],
       "additionalProperties": false,
       "properties": {
         "id": {
@@ -117,7 +160,11 @@
         },
         "status": {
           "type": "string",
-          "enum": ["pass", "fail", "untested"],
+          "enum": [
+            "pass",
+            "fail",
+            "untested"
+          ],
           "description": "实测状态。pass = 未暴露，fail = 已暴露，untested = 尚未实测。只能填真实实测结论，未实测一律保持 untested。"
         },
         "reverseFunctional": {
@@ -125,29 +172,69 @@
           "description": "是否为反向功能指标。反向指标查的是「抗检测改动有没有把功能改坏」，判定为 true 时 pass 表示功能正常，与其余指标的通过方向相反。设立反向指标是因为这两类失败的代价不同：暴露导致单个应用不可用，功能损坏导致产品不可用。"
         },
         "measuredAt": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time",
           "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
           "description": "最近一次实测的时刻，必须带时区偏移。状态为 untested 时保持 null。"
         },
         "evidence": {
-          "type": "string",
-          "description": "可复现的验证命令与关键输出。状态脱离 untested 时必须补齐，否则该结论无法复核。"
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "实测结论的证据定位，指向实验产物相对路径（如 wm10-verify/probes/ 输出文件）。状态脱离 untested 时必须填写。"
         }
       },
       "allOf": [
         {
           "$comment": "状态与实测证据绑定：status 脱离 untested 的指标必须给出实测时刻，避免出现无法复核的结论。",
-          "if": { "properties": { "status": { "enum": ["pass", "fail"] } }, "required": ["status"] },
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "pass",
+                  "fail"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
           "then": {
-            "required": ["measuredAt", "evidence"],
-            "properties": { "measuredAt": { "type": "string" } }
+            "required": [
+              "measuredAt",
+              "evidence"
+            ],
+            "properties": {
+              "measuredAt": {
+                "type": "string"
+              }
+            }
           }
         },
         {
           "$comment": "反向功能指标必须写明它守住的是哪项能力，否则「功能正常」无从判定。",
-          "if": { "properties": { "reverseFunctional": { "const": true } }, "required": ["reverseFunctional"] },
-          "then": { "properties": { "expected": { "minLength": 1 } } }
+          "if": {
+            "properties": {
+              "reverseFunctional": {
+                "const": true
+              }
+            },
+            "required": [
+              "reverseFunctional"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expected": {
+                "minLength": 1
+              }
+            }
+          }
         }
       ]
     }
