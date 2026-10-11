@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XBearDeviceIdentity",
+  "description": "每实例唯一身份对象。一次生成，多通道一致下发：同一实例在所有可读通道上必须呈现同一个故事，任一字段在实例生命周期内不得变更。格式约束与跨字段一致性约束同时生效，任一不满足即拒绝生成。宿主侧持有，Windows 端与 Android 端共用；本契约是实例配置里 deviceIdentity 段的上位定义，生成规则以此处为准。",
+  "type": "object",
+  "required": ["schemaVersion", "serialNo", "androidId", "mac", "deviceProfile"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "身份契约自身的版本。与 spec/version.json 的 spec.version 同源，改动本契约的可解析内容时必须同步递增。"
+    },
+    "serialNo": {
+      "type": "string",
+      "pattern": "^XBSN[0-9A-F]{12}$",
+      "minLength": 16,
+      "maxLength": 16,
+      "description": "设备序列号。恒为 XBSN 加 12 位大写十六，字符集取 [A-Za-z0-9]，无空白、无逗号、无引号。经 SMBIOS type=1/2/3 的 serial 与内核命令行 androidboot.serialno 下发，是唯一在 AOSP 有标准消费方的标识字段。同实例跨重启恒定。"
+    },
+    "androidId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{16}$",
+      "minLength": 16,
+      "maxLength": 16,
+      "description": "Android ID。16 位小写十六，大小写敏感。AOSP 未定义内核引导期的消费方，必须经实例内设置库写入后回读校验，仅下发不生效。跨实例互不相同，是多开场景下防「同设备多账号」关联的核心字段。"
+    },
+    "imei": {
+      "type": ["string", "null"],
+      "pattern": "^86[0-9]{12}[0-9]$",
+      "minLength": 15,
+      "maxLength": 15,
+      "description": "IMEI。恒为 15 位、国家码 86、末位为 Luhn 校验位。条件字段：仅当所引用镜像实测具备 telephony 能力时填写，否则必须为 null。不得下发到无基带的实例，否则制造「声明存在却无人消费」的新矛盾。"
+    },
+    "mac": {
+      "type": "string",
+      "pattern": "^([0-9a-f]{2}:){5}[0-9a-f][02468aAcCeE]$",
+      "not": { "type": "string", "pattern": "^00:00:00:00:00:00$" },
+      "description": "网卡 MAC。6 字节小写十六冒号分隔。末字节取偶数位：组播位位于字节最低位，为 0 才表示单播，全零亦被拒——这两条与 QEMU 无关，QEMU 会照单全收全零与组播值，格式合法性由本契约与生成侧自校验兜底。OUI 取内置机型族表的固定段，只随机末三字节且由 serialNo 确定性派生，保证同实例跨重启恒定、跨实例唯一。"
+    },
+    "deviceProfile": {
+      "type": "object",
+      "description": "机型族画像。DMI/SMBIOS 字符串、系统属性与 Build 指纹的唯一来源，三者不得各写一份；各分区属性必须由本对象统一派生，禁止分区各写。取值取自内置机型族表，不得使用真实在售机型的完整画像，避免与真机数据库撞库。",
+      "required": ["profileId", "brand", "manufacturer", "productName", "productVersion", "productFamily", "productSku", "cpuArchitecture"],
+      "additionalProperties": false,
+      "properties": {
+        "profileId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
+          "description": "机型族标识，取自内置机型族表。扩展该表不需要改代码，表的形态由本契约表达。"
+        },
+        "brand": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9 ._-]{1,31}$",
+          "description": "品牌名。派生 ro.product.brand 与 ro.product.*.brand，四个分区必须取同一值。厂商段必须与 manufacturer 同源（见下文一致性约束）。"
+        },
+        "manufacturer": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9 ._,-]{1,63}$",
+          "description": "厂商全称。派生 ro.product.manufacturer 与 SMBIOS type=1 的 manufacturer。厂商段必须与 brand 同源。二者不同源会被属性一致性校验直接命中，一致性由生成侧校验保证。"
+        },
+        "productName": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9 ._+-]{1,63}$",
+          "description": "机型销售名。派生 SMBIOS type=1 的 product 与 ro.product.model。productFamily 必须是本字段的前缀。"
+        },
+        "productVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "description": "机型版本串。派生 SMBIOS type=1 的 version 与 ro.product.name 的对应项。不得与机型族的年代自相矛盾。"
+        },
+        "productFamily": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "description": "机型族名。派生 SMBIOS type=1 的 family。必须是 productName 的前缀。"
+        },
+        "productSku": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "description": "机型 SKU。派生 SMBIOS type=1 的 sku。"
+        },
+        "device": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{1,63}$",
+          "description": "产品代号。派生 ro.product.device、指纹串的产品段与实例内主机名，无空白。"
+        },
+        "cpuManufacturer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "description": "CPU 厂商。派生 SMBIOS type=4 的 manufacturer。架构须与 cpuArchitecture 一致。"
+        },
+        "cpuVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "description": "CPU 版本串。派生 SMBIOS type=4 的 version。与所选 CPU 型号必须取自同一份选型，二者不一致会制造新矛盾；不得带 ARM 系列词（见下文一致性约束）。"
+        },
+        "cpuArchitecture": {
+          "enum": ["x86_64"],
+          "description": "CPU 架构。取值受限于本产品的 x86_64 运行形态。该值与真机 ARM 画像的冲突属已知不可缓项，不得通过伪造 ro.product.cpu.abilist 掩盖：镜像已带二进制转译层，abilist 改写会与实际运行时能力矛盾并导致应用安装失败。"
+        },
+        "boardManufacturer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "description": "主板厂商。派生 SMBIOS type=2 的 manufacturer。"
+        },
+        "boardProduct": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "description": "主板型号。派生 SMBIOS type=2 的 product。"
+        },
+        "chassisManufacturer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "description": "机箱厂商。派生 SMBIOS type=3 的 manufacturer。"
+        },
+        "chassisAsset": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "description": "机箱资产号。派生 SMBIOS type=3 的 asset。"
+        }
+      }
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}/[A-Za-z0-9][A-Za-z0-9._-]{0,63}/[A-Za-z0-9][A-Za-z0-9._-]{0,31}:[0-9]{1,2}/[A-Za-z0-9._-]{1,31}/[0-9]{1,7}:[a-z]{1,16}/[a-z-]{1,32}$",
+      "description": "Build 指纹。形如 品牌/产品/机型:版本/构建号/incremental:类型/标签。品牌段与产品段取自 deviceProfile，类型段必须与 buildIdentity.type 同值——两者不一致会被一致性校验直接命中，等同于把一处矛盾换成另一处。覆写必须与 ro.build.type、ro.build.tags、ro.build.flavor 四者同步进行。"
+    },
+    "buildIdentity": {
+      "type": "object",
+      "description": "Build 属性族。type、tags、flavor 必须与 fingerprint 的类型段同源：fingerprint 内写 userdebug 而 ro.build.type 写 user，是可被一致性校验直接命中的破绽。",
+      "required": ["type", "tags", "flavor", "buildId"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["user", "userdebug", "eng"],
+          "description": "构建类型。保留 Root 权限与可写系统时只能取 userdebug 或 eng，取 user 会与实际能力矛盾。"
+        },
+        "tags": {
+          "type": "string",
+          "pattern": "^[a-z-]{1,32}$",
+          "description": "构建标签。release-keys 形态，须与 fingerprint 的标签段一致。"
+        },
+        "flavor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63,
+          "description": "构建风味串。必须与指纹的产品段同源，不得出现镜像来源的痕迹。"
+        },
+        "buildId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]{1,31}$",
+          "description": "构建号，对应指纹的构建号段。"
+        },
+        "incremental": {
+          "type": "string",
+          "pattern": "^[0-9]{1,7}$",
+          "description": "增量号，对应指纹的 incremental 段。上界与指纹中的同名段保持一致，避免同一字段在两处取不同的域。"
+        }
+      }
+    },
+    "bootIdentity": {
+      "type": "object",
+      "description": "启动链属性族。校验强度必须与实例的 Root 权限、系统可写能力自洽：保留 Root 权限与可写系统时，不得声明为完整校验通过的零售机画像——locked 与 green 与可写 root 三者并存即构成交叉校验可命中的矛盾，此时应主动降级为自洽的弱校验画像。",
+      "additionalProperties": false,
+      "properties": {
+        "flashLocked":       { "type": "string", "enum": ["0", "1"], "description": "对应 ro.boot.flash.locked。保留可写 root 时取 0" },
+        "vbmetaDeviceState": { "type": "string", "enum": ["green", "orange", "red"], "description": "对应 ro.boot.vbmeta.device_state" },
+        "verifiedBootState": { "type": "string", "enum": ["green", "orange", "red"], "description": "对应 ro.boot.verifiedbootstate" },
+        "verityMode":        { "type": "string", "enum": ["enforcing", "relaxed", "disabled"], "description": "对应 ro.boot.veritymode，须与 dm-verity 的实际状态一致" },
+        "bootloader":        { "type": "string", "minLength": 1, "maxLength": 63, "description": "对应 ro.bootloader。不得三连 unknown，bootloader、baseband、bootmode 应同时给出可自洽的取值" },
+        "baseband":          { "type": ["string", "null"], "minLength": 1, "maxLength": 63, "description": "对应 ro.baseband。镜像无 telephony 能力时为 null" },
+        "bootmode":          { "type": "string", "minLength": 1, "maxLength": 63, "description": "对应 ro.bootmode" }
+      }
+    },
+    "adbGuid": {
+      "type": "string",
+      "pattern": "^adb-[A-Za-z0-9_-]{8,40}$",
+      "description": "ADB 无线调试 GUID。实例首次启动时生成一次后持久化，跨重启保持不变，跨实例互不相同。属「本应由设备身份派生却未派生」的典型漏项，每次生成新实例必须重新派生而不是沿用镜像固化值。"
+    },
+    "hostName": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,62}$",
+      "description": "实例内主机名。取 deviceProfile.device 的机型代号形式，与 SMBIOS productName 同源；由引导阶段设置或自定义内核的引导参数给出。主机名若与机型代号不一致，会与 DMI 的机型串形成新矛盾。"
+    },
+    "channels": {
+      "type": "object",
+      "description": "通道接通记录。形态取自 image.schema.json 的 verified：只登记实测结论，不登记实现意图。未实测的通道保持 untested，产品不得据此宣称该标识已接通。通道存在不等于值生效，因此本对象只能由启动后的回读比对填写，不得在生成时预填。",
+      "additionalProperties": false,
+      "properties": {
+        "smbios":           { "type": "string", "enum": ["pass", "fail", "untested"], "description": "DMI/SMBIOS 通道，实例启动后回读 /sys/class/dmi/id 实测" },
+        "kernelCmdline":    { "type": "string", "enum": ["pass", "fail", "untested"], "description": "内核命令行 androidboot.* 通道，回读 /proc/cmdline 实测；仅内核引导模式可用，磁盘引导下恒为 fail" },
+        "systemProperties": { "type": "string", "enum": ["pass", "fail", "untested"], "description": "系统属性覆写通道，回读 getprop 实测；依赖镜像引导早期 /system 可写，该前提是镜像实测结论而非契约保证" },
+        "androidId":        { "type": "string", "enum": ["pass", "fail", "untested"], "description": "Android ID 落地通道，回读 settings get secure android_id 实测" },
+        "telephonyImei":    { "type": "string", "enum": ["pass", "fail", "untested"], "description": "IMEI 通道；镜像无 telephony 能力时恒为 fail，此时 imei 必须为 null" },
+        "mac":              { "type": "string", "enum": ["pass", "fail", "untested"], "description": "MAC 通道，回读 /sys/class/net/<接口名>/address 实测" }
+      }
+    },
+    "evidence": {
+      "type": "string",
+      "description": "可复现的验证命令与关键输出。形态取自 image.schema.json 的 verified.evidence，用于把「已下发」与「已生效」区分开：没有回读输出的通道记录不成立。"
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "跨字段一致性：CPU 架构为 x86_64 时，cpuVersion 不得带 ARM 系列词。x86_64 机型配 ARM CPU 条目会与 /proc/cpuinfo 直接矛盾。JSON Schema 的 pattern 锚定 ECMA-262 正则，不支持内联 (?i) 修饰符，因此大小写两写逐字符列出。",
+      "if": { "properties": { "deviceProfile": { "properties": { "cpuArchitecture": { "const": "x86_64" } }, "required": ["cpuArchitecture"] } }, "required": ["deviceProfile"] },
+      "then": {
+        "properties": {
+          "deviceProfile": {
+            "properties": {
+              "cpuVersion": {
+                "not": {
+                  "pattern": "[Aa][Rr][Mm]|[Aa][Aa][Rr][Cc][Hh]64|[Cc][Oo][Rr][Tt][Ee][Xx]|[Ee][Xx][Yy][Nn][Oo][Ss]|[Ss][Nn][Aa][Pp][Dd][Rr][Aa][Gg][Oo][Nn]|[Dd][Ii][Mm][Ee][Nn][Ss][Ii][Tt][Yy]|[Kk][Ii][Rr][Ii][Nn]|[Tt][Ee][Gg][Rr][Aa]|[Qq][Uu][Aa][Ll][Cc][Oo][Mm][Mm]"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "跨字段一致性：productFamily 必须是 productName 的前缀，机型族与销售名同源；brand 与 manufacturer 必须同源。前缀与子串这类跨字段比对取不到对方的取值，JSON Schema 表达不了，因此本条只登记不实现，由生成侧的生成后校验承担，不在此处写无效约束。",
+      "properties": {
+        "deviceProfile": {
+          "properties": {
+            "productFamily": { "minLength": 1 },
+            "brand": { "minLength": 1 }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "跨字段一致性：imei 非空时 telephonyImei 通道必须已有结论，不得缺席。imei 非空即声明了 telephony 能力，对应的通道记录必须显式给出实测状态（含实测未接通的 fail），缺席会留下无法判定的空洞。",
+      "if": { "properties": { "imei": { "type": "string" } }, "required": ["imei"] },
+      "then": {
+        "properties": {
+          "channels": {
+            "properties": {
+              "telephonyImei": { "enum": ["pass", "fail", "untested"] }
+            },
+            "required": ["telephonyImei"]
+          }
+        },
+        "required": ["channels"]
+      }
+    },
+    {
+      "$comment": "跨字段一致性：fingerprint 与 buildIdentity 成对出现——类型段与 buildIdentity.type 的比对跨字段取值，JSON Schema 表达不了，因此先约束两者不拆对：只写其一时无法完成自洽校验，由生成侧的生成后校验在其同时存在时承担同值比对。",
+      "if": { "required": ["fingerprint"] },
+      "then": { "required": ["buildIdentity"] },
+      "else": { "not": { "required": ["buildIdentity"] } }
+    }
+  ]
+}

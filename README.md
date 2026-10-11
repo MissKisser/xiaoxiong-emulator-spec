@@ -41,6 +41,7 @@ spec/
 ├─ terminology.json             双端统一术语表，含禁用近义词
 ├─ version.json                 产品版本与规格版本，及各自的递增规则
 ├─ baseline.json                两端共同的性能基线；目标值与实测值分列
+├─ detection-surface.json       检测面指标台账；审计编号锚定 + 检测命令 + 期望结果 + 实测状态
 ├─ brand/                       品牌资产：标识、应用图标、配色映射与使用约束
 │  ├─ logo-mark.svg             主标识（纯图形，浅色底）
 │  ├─ logo-mark-inverse.svg     主标识反色版（深色底）
@@ -54,16 +55,20 @@ spec/
 │  └─ *.svg                     实例、快照、镜像、交互、传输、状态与风险类图标
 └─ schema/
    ├─ instance.schema.json      实例配置契约（含 display 显示设置）
+   ├─ identity.schema.json      设备身份契约（序列号 / Android ID / MAC / 机型族画像等）
    ├─ image.schema.json         镜像清单契约（含 boot 推荐引导配置）
    ├─ snapshot.schema.json      快照元数据契约
    ├─ projection.schema.json    投屏会话契约
    ├─ filetransfer.schema.json  文件传输任务契约
    ├─ module.schema.json        模块清单与安装状态契约
    ├─ application.schema.json   应用管理契约
+   ├─ detection-surface.schema.json 检测面指标台账的结构定义
    ├─ terminology.schema.json   术语表结构定义
    └─ fixtures/                 双向兼容测试样例
       ├─ instance.windows.json  Windows 端样例
       ├─ instance.android.json  Android 端样例
+      ├─ identity-minimal.json  设备身份样例（仅必填字段）
+      ├─ identity-full.json     设备身份样例（覆盖全部可选字段）
       ├─ image.json             镜像样例
       ├─ snapshot-minimal.json  快照样例（仅必填字段）
       ├─ snapshot-full.json     快照样例（覆盖全部可选字段）
@@ -94,7 +99,8 @@ git commit -m "chore: 引入共享规格层"
 4. `image.json` 的 `verified` 字段只填实测结论，`untested` 不得臆测改为 `pass`
 5. 规格变更必须先改本仓库，再更新两端代码；不允许某端私自扩展字段语义
 6. `baseline.json` 的 `measured` 只填真实实测值，**不得由 `target` 推导或估算**；无法测量时保持 `null` 并写明 `blockedBy`
-7. 版本号一律从 `version.json` 读取，两端代码与关于页**不得硬编码任何版本字符串**；产品版本与规格版本是两个独立序列
+7. `detection-surface.json` 的 `status` 同样只填实测结论，`untested` 不得臆测改为 `pass`；判定为做不到的指标回填 `fail` 而非长期挂 `untested`
+8. 版本号一律从 `version.json` 读取，两端代码与关于页**不得硬编码任何版本字符串**；产品版本与规格版本是两个独立序列
 
 ## 目标能力基线
 

@@ -14,7 +14,7 @@
       { "hostPort": 15555, "guestPort": 5555, "protocol": "tcp", "bind": "loopback" },
       { "hostPort": 18080, "guestPort": 8080, "protocol": "tcp", "bind": "lan" }
     ],
-    "fixedAddress": "10.0.2.15",
+    "fixedAddress": "192.168.77.15/24",
     "proxy": {
       "type": "http",
       "host": "127.0.0.1",
@@ -23,9 +23,12 @@
     "exposure": "loopback"
   },
   "deviceIdentity": {
-    "serialNo": "WB1A19F30001X7",
-    "androidId": "a3f9c2e17b8d4056",
-    "imei": "861234567890123"
+    "serialNo": "XBSN0A1B2C3D4E5F",
+    "androidId": "3f7a91c4de20b865",
+    "imei": "861234567890123",
+    "mac": "3a:1f:0c:9d:2b:74",
+    "deviceProfileId": "xb-alpha-11",
+    "identityVersion": "1.0.0"
   },
   "display": {
     "width": 1920,

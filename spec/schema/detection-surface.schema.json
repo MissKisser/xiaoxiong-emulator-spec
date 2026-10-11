@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XBearDetectionSurface",
+  "description": "检测面指标台账的形态定义。台账按检测面分层组织，每条指标是一次可复现的实例内检查：一条检测命令、一句期望结果、一个实测状态。它测的是「像不像真机」而不是「能不能用」，与 image.schema.json 的 verified.fidelity 是两个方向相反的度量，不可互相替代、不可互相推导。台账不是镜像准入门槛，未通过的指标只登记为已知暴露，不淘汰镜像。",
+  "type": "object",
+  "required": ["version", "semantics", "execution", "groups", "fillPolicy"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "台账契约自身的版本。与 spec/version.json 的 spec.version 同源，增删指标或改动可解析内容时必须同步递增。"
+    },
+    "semantics": {
+      "type": "object",
+      "description": "指标语义的权威声明。方向、载体与处置三条必须写在这里，避免与保真度门槛混读。",
+      "required": ["subject", "stateDirection", "carrier", "admission"],
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "type": "string",
+          "description": "测什么。实例在检测方视角下是否像一台真机，与「功能是否可用」无关。"
+        },
+        "stateDirection": {
+          "type": "string",
+          "description": "通过的方向。pass = 未暴露，fail = 已暴露；与保真度的方向相反，不可互相套用。"
+        },
+        "carrier": {
+          "type": "string",
+          "description": "台账的载体位置。每实例的回读结论记在 identity.channels，两者不是同一份记录：本台账跟踪整体暴露面，identity.channels 记录单个实例的通道接通情况。"
+        },
+        "admission": {
+          "type": "string",
+          "description": "未通过时的处置。不淘汰镜像，只登记为已知暴露；与保真度门槛的必过项处置相反。"
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "description": "执行前提。指标命令在实例内执行，宿主侧只负责采集与比对。",
+      "required": ["scope", "placeholder"],
+      "additionalProperties": false,
+      "properties": {
+        "scope": { "type": "string", "description": "执行域。命令在实例内执行。" },
+        "placeholder": {
+          "type": "string",
+          "description": "占位符写法。命令中的尖括号片段是宿主侧代入的实例实际值，不是命令字面量。"
+        }
+      }
+    },
+    "groups": {
+      "type": "array",
+      "description": "按检测面分层组织的指标组，组的顺序即从固件到跨层交叉校验的顺序。",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "metrics"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}$", "description": "指标组标识。" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 32, "description": "指标组名称，即所测的检测面。" },
+          "metrics": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/metric" }
+          }
+        }
+      }
+    },
+    "fillPolicy": {
+      "type": "array",
+      "description": "状态回填纪律。",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "description": "单条检测面指标。",
+      "required": ["id", "name", "auditRefs", "command", "expected", "status", "reverseFunctional"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z]-[0-9]{2}$",
+          "description": "指标标识。前缀取所在指标组的组标识，与组内序号构成定位坐标；台账内的指标标识空间独立于审计发现的编号空间，两者不可混用。"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "检查项，一句话说明这条指标在查什么。"
+        },
+        "auditRefs": {
+          "type": "array",
+          "description": "该指标锚定的审计发现编号。每条指标都必须能回溯到审计中的既有发现，不允许出现没有审计来源的指标。",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(?:F|H|M|L|G|X)-[0-9]{2}[a-z]?$",
+            "description": "审计发现编号。F/H/M/L 为分级前缀，G 为代码级缺口，X 为审计未覆盖、由设计补记的关注项。"
+          }
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "description": "检测命令，在实例内执行。含尖括号占位符的片段由宿主侧代入实例实际值后再执行。"
+        },
+        "expected": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "期望结果，一句话写清判据。写「无输出」「退出码 0」「等于某取值」这类可机械判定的结论，不写主观描述。"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pass", "fail", "untested"],
+          "description": "实测状态。pass = 未暴露，fail = 已暴露，untested = 尚未实测。只能填真实实测结论，未实测一律保持 untested。"
+        },
+        "reverseFunctional": {
+          "type": "boolean",
+          "description": "是否为反向功能指标。反向指标查的是「抗检测改动有没有把功能改坏」，判定为 true 时 pass 表示功能正常，与其余指标的通过方向相反。设立反向指标是因为这两类失败的代价不同：暴露导致单个应用不可用，功能损坏导致产品不可用。"
+        },
+        "measuredAt": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+          "description": "最近一次实测的时刻，必须带时区偏移。状态为 untested 时保持 null。"
+        },
+        "evidence": {
+          "type": "string",
+          "description": "可复现的验证命令与关键输出。状态脱离 untested 时必须补齐，否则该结论无法复核。"
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "状态与实测证据绑定：status 脱离 untested 的指标必须给出实测时刻，避免出现无法复核的结论。",
+          "if": { "properties": { "status": { "enum": ["pass", "fail"] } }, "required": ["status"] },
+          "then": {
+            "required": ["measuredAt", "evidence"],
+            "properties": { "measuredAt": { "type": "string" } }
+          }
+        },
+        {
+          "$comment": "反向功能指标必须写明它守住的是哪项能力，否则「功能正常」无从判定。",
+          "if": { "properties": { "reverseFunctional": { "const": true } }, "required": ["reverseFunctional"] },
+          "then": { "properties": { "expected": { "minLength": 1 } } }
+        }
+      ]
+    }
+  }
+}

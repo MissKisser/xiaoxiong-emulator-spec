@@ -60,8 +60,8 @@
         },
         "fixedAddress": {
           "type": ["string", "null"],
-          "pattern": "^10\\.0\\.2\\.[0-9]{1,3}$",
-          "description": "多开场景硬需求，实例 IP 不得随启动顺序漂移"
+          "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(?:\\/(?:3[0-2]|[12]?[0-9]))?$",
+          "description": "实例的固定地址，形式为 IPv4 地址或 IPv4 地址加前缀长度。取宿主网络仿真的默认网段会把它写进实例，属可被交叉校验命中的暴露面，因此契约不预设网段，只要求取值合法；地址不得随启动顺序漂移。前缀缺省时由产品按选定的网段补齐。"
         },
         "proxy": {
           "type": ["object", "null"],
@@ -80,12 +80,48 @@
       }
     },
     "deviceIdentity": {
-      "type": "object",
-      "description": "每实例强制独立，标识不得自动复用",
+      "type": ["object", "null"],
+      "description": "每实例强制独立的设备身份。省略或为 null 表示用户未手工指定，由产品在创建实例时生成并写入，不表示该实例无身份；一旦存在则 serialNo 与 androidId 必须齐全，半截身份一律拒绝——标识只生成一半时相关下发通道会静默失效，实例对外呈现为空序列号。生成规则与格式定义见 identity.schema.json。",
+      "required": ["serialNo", "androidId"],
+      "additionalProperties": false,
       "properties": {
-        "serialNo":  { "type": "string", "minLength": 8, "maxLength": 32 },
-        "androidId": { "type": "string", "minLength": 16, "maxLength": 32 },
-        "imei":      { "type": "string", "minLength": 14, "maxLength": 16 }
+        "serialNo": {
+          "type": "string",
+          "pattern": "^XBSN[0-9A-F]{12}$",
+          "minLength": 16,
+          "maxLength": 16,
+          "description": "设备序列号。恒为 XBSN 加 12 位大写十六。经 SMBIOS type=1/2/3 的 serial 与内核命令行 androidboot.serialno 下发，是唯一在 AOSP 有标准消费方的标识字段。同实例跨重启恒定。"
+        },
+        "androidId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$",
+          "minLength": 16,
+          "maxLength": 16,
+          "description": "Android ID。16 位小写十六，大小写敏感。AOSP 无内核引导期消费方，必须经实例内设置库落地后回读校验，仅下发不生效。跨实例互不相同。"
+        },
+        "imei": {
+          "type": ["string", "null"],
+          "pattern": "^86[0-9]{12}[0-9]$",
+          "minLength": 15,
+          "maxLength": 15,
+          "description": "IMEI。恒为 15 位、国家码 86、末位为 Luhn 校验位。仅当所引用镜像实测具备 telephony 能力时填写，否则必须为 null；为 null 时不得向内核命令行下发该键，否则制造「声明存在却无人消费」的矛盾。"
+        },
+        "mac": {
+          "type": ["string", "null"],
+          "pattern": "^([0-9a-f]{2}:){5}[0-9a-f][02468aAcCeE]$",
+          "not": { "type": "string", "pattern": "^00:00:00:00:00:00$" },
+          "description": "网卡 MAC。6 字节小写十六冒号分隔，末字节取偶数位（组播位为字节最低位，为 0 才表示单播），全零亦被拒。省略或为 null 时由 serialNo 确定性派生，实例首次创建后固定不变：同实例跨重启恒定，跨实例唯一；MAC 逐次跳变本身就是异常特征。"
+        },
+        "deviceProfileId": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
+          "description": "机型族标识，引用 identity.schema.json 的机型族画像。省略或为 null 时按实例序号确定性选取；同机型族实例之间仍需靠 serialNo、androidId、mac 区分。"
+        },
+        "identityVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "所引用的 identity.schema 版本。产品读入时若高于自身支持的版本，按未识别处理并保留原始字段，不得静默丢弃。"
+        }
       }
     },
     "display": {

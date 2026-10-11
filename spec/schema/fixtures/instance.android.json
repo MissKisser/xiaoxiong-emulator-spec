@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "and-main-01",
   "displayName": "主力实例",
   "platform": "android",
@@ -22,9 +22,8 @@
     "exposure": "loopback"
   },
   "deviceIdentity": {
-    "serialNo": "XBA20C40002Y8",
-    "androidId": "b7e1d93f05a24c18",
-    "imei": "869876543210987"
+    "serialNo": "XBSN5D8E4A0C7B2E",
+    "androidId": "b7e1d93f05a24c18"
   },
   "platformConfig": {
     "containerRuntime": "system-level",

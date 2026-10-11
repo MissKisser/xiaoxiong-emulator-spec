@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "serialNo": "XBSN9E4D7C2B6A08",
+  "androidId": "6b02ce81af54d937",
+  "imei": "861234567890123",
+  "mac": "3a:1f:0c:5e:b8:d0",
+  "deviceProfile": {
+    "profileId": "xb-alpha-11",
+    "brand": "Xion",
+    "manufacturer": "Xion Devices",
+    "productName": "Xion Vibe 12 Pro 5G",
+    "productVersion": "12.1",
+    "productFamily": "Xion Vibe",
+    "productSku": "XV12P-512-12",
+    "device": "vibe12pro",
+    "cpuManufacturer": "Xion",
+    "cpuVersion": "Xion XQ-7200",
+    "cpuArchitecture": "x86_64",
+    "boardManufacturer": "Xion Devices",
+    "boardProduct": "XV12-MB-A3",
+    "chassisManufacturer": "Xion Devices",
+    "chassisAsset": "ASSET-000184"
+  },
+  "fingerprint": "Xion/vibe12pro/vibe12pro:11/XV12.211119.001/2145:userdebug/release-keys",
+  "buildIdentity": {
+    "type": "userdebug",
+    "tags": "release-keys",
+    "flavor": "vibe12pro-userdebug",
+    "buildId": "XV12.211119.001",
+    "incremental": "2145"
+  },
+  "bootIdentity": {
+    "flashLocked": "0",
+    "vbmetaDeviceState": "orange",
+    "verifiedBootState": "orange",
+    "verityMode": "relaxed",
+    "bootloader": "xion-boot-1.2",
+    "baseband": null,
+    "bootmode": "normal"
+  },
+  "adbGuid": "adb-KqVsNbo9UyoZav3h-2145",
+  "hostName": "vibe12pro",
+  "channels": {
+    "smbios": "untested",
+    "kernelCmdline": "untested",
+    "systemProperties": "untested",
+    "androidId": "untested",
+    "telephonyImei": "untested",
+    "mac": "untested"
+  },
+  "evidence": "尚未实测。本样例的 channels 全部为 untested，说明通道记录只能由实例启动后的回读比对填写，不得在生成时预填。"
+}

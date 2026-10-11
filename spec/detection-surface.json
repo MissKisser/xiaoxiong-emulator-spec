@@ -1,0 +1,506 @@
+{
+  "version": "1.0.0",
+  "semantics": {
+    "subject": "测的是实例在检测方视角下是否像一台真机，不是功能是否可用。功能可用性由 image.schema.json 的 verified.fidelity 承载，两者测的不是一件事，不可互相替代。",
+    "stateDirection": "pass = 未暴露，fail = 已暴露。方向与保真度相反：保真度是功能可用才算 pass，本台账是不被判定为环境才算 pass。",
+    "carrier": "本台账是暴露面台账，跟踪跨期推进效果与对外可给出的诚实结论；单个实例的标识通道接通情况记在 identity.channels。两者不是同一份记录，不可互相替代。",
+    "admission": "未通过的指标不淘汰镜像，只登记为已知暴露。它不是镜像准入门槛，与保真度门槛中必过项的处置相反。"
+  },
+  "execution": {
+    "scope": "检测命令在实例内执行，宿主侧只负责下发、采集输出与逐条比对。",
+    "placeholder": "命令中的尖括号片段是宿主侧代入的实例实际值（如 <实例 serialNo>），不是命令字面量，直接照抄执行必然失败。"
+  },
+  "groups": [
+    {
+      "id": "firmware-dmi",
+      "name": "固件与 DMI",
+      "metrics": [
+        {
+          "id": "D-01",
+          "name": "DMI 无宿主仿真器字样",
+          "auditRefs": ["F-01"],
+          "command": "cat /sys/class/dmi/id/{bios_vendor,bios_version,sys_vendor,chassis_vendor} | grep -iE 'qemu|seabios'",
+          "expected": "无输出",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "D-02",
+          "name": "DMI 无宿主仿真器机型串",
+          "auditRefs": ["F-02", "F-01"],
+          "command": "cat /sys/class/dmi/id/{product_name,product_version,chassis_version,product_family} | grep -iE 'i440fx|piix|standard pc'",
+          "expected": "无输出",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "D-03",
+          "name": "DMI 序列号非空且与实例一致",
+          "auditRefs": ["F-05", "G-05"],
+          "command": "[ -n \"$(cat /sys/class/dmi/id/product_serial)\" ] && [ \"$(cat /sys/class/dmi/id/product_serial)\" = \"<实例 serialNo>\" ]",
+          "expected": "退出码 0",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "D-04",
+          "name": "主板与机箱条目同族",
+          "auditRefs": ["F-01"],
+          "command": "cat /sys/class/dmi/id/{board_vendor,board_name,chassis_vendor} | grep -iE 'qemu'",
+          "expected": "无输出",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "D-05",
+          "name": "机型族与型号串同源",
+          "auditRefs": ["F-02", "M-15"],
+          "command": "cat /sys/class/dmi/id/product_name",
+          "expected": "与 getprop ro.product.model 比对，前者的代号部分是后者的前缀",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        }
+      ]
+    },
+    {
+      "id": "cpu-traces",
+      "name": "CPU 与虚拟化痕迹",
+      "metrics": [
+        {
+          "id": "C-01",
+          "name": "CPU 虚拟化标志位已清除",
+          "auditRefs": ["H-05", "L-07"],
+          "command": "grep -oE 'hypervisor|kvm|vmx|svm' /proc/cpuinfo | sort -u",
+          "expected": "无输出",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "C-02",
+          "name": "无虚拟化专属指令组合",
+          "auditRefs": ["H-05"],
+          "command": "grep -oE 'invpcid|fsgsbase|kvmclock' /proc/cpuinfo | sort -u",
+          "expected": "无输出",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "C-03",
+          "name": "CPU 型号为零售 SKU 形态",
+          "auditRefs": ["L-01"],
+          "command": "grep -m1 'model name' /proc/cpuinfo; grep -m1 microcode /proc/cpuinfo",
+          "expected": "model name 不等于 Intel Core Processor (Skylake)；microcode 不等于 0xffffffff",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        }
+      ]
+    },
+    {
+      "id": "system-fingerprint",
+      "name": "系统属性与指纹",
+      "metrics": [
+        {
+          "id": "S-01",
+          "name": "品牌非宿主仿真器厂商名",
+          "auditRefs": ["F-03"],
+          "command": "getprop ro.product.brand",
+          "expected": "不等于 QEMU",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "S-02",
+          "name": "厂商全称非 unknown",
+          "auditRefs": ["F-03"],
+          "command": "getprop ro.product.manufacturer",
+          "expected": "非空且非 unknown",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "S-03",
+          "name": "四分区品牌完全一致",
+          "auditRefs": ["M-15"],
+          "command": "getprop | grep -E 'brand=' | awk -F= '{print $2}' | sort -u | wc -l",
+          "expected": "1",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "S-04",
+          "name": "四类构建指纹完全一致",
+          "auditRefs": ["M-02"],
+          "command": "getprop | grep -E 'build.fingerprint' | awk -F'[][]' '{print $4}' | sort -u | wc -l",
+          "expected": "1",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "S-05",
+          "name": "构建类型与指纹自洽",
+          "auditRefs": ["M-02"],
+          "command": "getprop ro.build.type; getprop ro.build.fingerprint",
+          "expected": "指纹内的类型段与 ro.build.type 相同。类型段写 userdebug 而类型属性写 user 是可被一致性校验直接命中的破绽",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "S-06",
+          "name": "构建风味与指纹同源",
+          "auditRefs": ["M-02"],
+          "command": "getprop ro.build.flavor",
+          "expected": "与指纹的产品段同源，不含镜像来源痕迹",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "S-07",
+          "name": "无第三方 ROM 机型串",
+          "auditRefs": ["M-02", "F-02"],
+          "command": "getprop | grep -iE 'android-x86|bliss' | grep -v 'ro.bliss'",
+          "expected": "无输出",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "S-08",
+          "name": "无镜像私有属性族",
+          "auditRefs": ["L-05"],
+          "command": "getprop | grep -c '^\\[ro.bliss\\.'",
+          "expected": "0",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "S-09",
+          "name": "架构串不作机型标识",
+          "auditRefs": ["M-15", "X-01"],
+          "command": "getprop ro.product.model; getprop ro.product.device; getprop ro.board.platform",
+          "expected": "三者均为机型族派生值，不含 x86_64",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "S-10",
+          "name": "启动链与能力面自洽",
+          "auditRefs": ["M-03"],
+          "command": "getprop ro.boot.flash.locked; getprop ro.boot.vbmeta.device_state; getprop ro.build.type",
+          "expected": "保留 Root 权限与可写系统时三者按 bootIdentity 判定为同向，不出现完整校验通过的零售机画像与可写 root 并存",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "S-11",
+          "name": "引导器与基带取值非三连 unknown",
+          "auditRefs": ["M-03"],
+          "command": "getprop ro.bootloader; getprop ro.baseband; getprop ro.bootmode",
+          "expected": "按 bootIdentity 派生，不出现三个 unknown 并存",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        }
+      ]
+    },
+    {
+      "id": "rendering",
+      "name": "渲染与图形",
+      "metrics": [
+        {
+          "id": "G-01",
+          "name": "渲染属性串非软件渲染器",
+          "auditRefs": ["M-01"],
+          "command": "getprop ro.hardware.egl; getprop ro.hardware.vulkan",
+          "expected": "非 swiftshader 且非 pastel",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "name": "网络",
+      "metrics": [
+        {
+          "id": "N-01",
+          "name": "MAC 非宿主默认值且全实例唯一",
+          "auditRefs": ["H-01"],
+          "command": "cat /sys/class/net/*/address",
+          "expected": "非 52:54:00 前缀；非全零；末字节非组播位",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "N-02",
+          "name": "同实例跨重启 MAC 恒定",
+          "auditRefs": ["H-01"],
+          "command": "重启前后各执行一次 N-01 的命令并比对",
+          "expected": "两次输出完全相同。MAC 逐次跳变本身即是异常特征",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "N-03",
+          "name": "IP 不在宿主默认网段",
+          "auditRefs": ["H-10"],
+          "command": "ip addr show eth0 | grep inet",
+          "expected": "不含 10.0.2.",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "N-04",
+          "name": "存在默认路由",
+          "auditRefs": ["H-10"],
+          "command": "ip route | grep -c '^default'",
+          "expected": "至少 1 条。真机永远有默认路由，缺失比网段本身更致命",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "N-05",
+          "name": "DNS 非宿主默认值",
+          "auditRefs": ["H-10"],
+          "command": "getprop net.dns1",
+          "expected": "不等于 10.0.2.3",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "N-06",
+          "name": "网络接口名为 wlan0",
+          "auditRefs": ["H-09"],
+          "command": "ip link show wlan0 && ! ip link show eth0",
+          "expected": "wlan0 存在且 eth0 不存在",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "N-07",
+          "name": "调试通路在新网段下仍可用",
+          "auditRefs": ["H-10"],
+          "command": "adb shell echo ok",
+          "expected": "返回 ok。投屏、文件传输与安装模块全部依赖调试通路，断链的后果比暴露更严重",
+          "status": "untested",
+          "reverseFunctional": true,
+          "measuredAt": null
+        }
+      ]
+    },
+    {
+      "id": "root-modules",
+      "name": "Root 与模块痕迹",
+      "metrics": [
+        {
+          "id": "R-01",
+          "name": "本地属性文件无明文 root 键",
+          "auditRefs": ["H-07"],
+          "command": "cat /data/local.prop 2>&1 | grep -E 'service\\.adb\\.(root|tcp)'",
+          "expected": "无输出",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "R-02",
+          "name": "Root 权限未受损",
+          "auditRefs": ["H-07"],
+          "command": "getprop service.adb.root; id",
+          "expected": "取值为 1；uid=0。隐藏痕迹不得以削弱 Root 权限为代价",
+          "status": "untested",
+          "reverseFunctional": true,
+          "measuredAt": null
+        },
+        {
+          "id": "R-03",
+          "name": "无可枚举的 root 框架守护进程",
+          "auditRefs": ["H-08"],
+          "command": "find / -name 'ksud' 2>/dev/null",
+          "expected": "无输出",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "R-04",
+          "name": "无约定标准模块目录",
+          "auditRefs": ["H-08"],
+          "command": "ls /data/adb/modules 2>&1",
+          "expected": "路径不存在或已改名",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "R-05",
+          "name": "模块机制未受损",
+          "auditRefs": ["H-08"],
+          "command": "在模块目录存在时检查系统叠加与阶段脚本的执行结果",
+          "expected": "系统叠加生效且阶段脚本按序执行。目录改名不得让已装模块失去加载入口",
+          "status": "untested",
+          "reverseFunctional": true,
+          "measuredAt": null
+        }
+      ]
+    },
+    {
+      "id": "storage",
+      "name": "存储与文件系统",
+      "metrics": [
+        {
+          "id": "F-01",
+          "name": "调试配对标识全实例唯一",
+          "auditRefs": ["L-06"],
+          "command": "getprop persist.adb.wifi.guid",
+          "expected": "各实例互不相同；同一实例跨重启保持不变",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "F-02",
+          "name": "无上一实例遗留的配对标识",
+          "auditRefs": ["L-06"],
+          "command": "getprop | grep -i 'persist.adb'",
+          "expected": "仅含本实例派生值",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        }
+      ]
+    },
+    {
+      "id": "cmdline-timing",
+      "name": "命令行与时序",
+      "metrics": [
+        {
+          "id": "T-01",
+          "name": "内核命令行含引导标识段",
+          "auditRefs": ["L-02", "G-05"],
+          "command": "cat /proc/cmdline | tr ' ' '\\n' | grep -c '^androidboot\\.'",
+          "expected": "至少 1 条",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "T-02",
+          "name": "内核命令行无引导脚本私有键",
+          "auditRefs": ["L-02"],
+          "command": "cat /proc/cmdline | grep -o 'SRC=[^ ]*'",
+          "expected": "无输出",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "T-03",
+          "name": "仅保留主控制台",
+          "auditRefs": ["L-03"],
+          "command": "cat /proc/consoles",
+          "expected": "不含 ttyS0",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        }
+      ]
+    },
+    {
+      "id": "identity",
+      "name": "身份一致性",
+      "metrics": [
+        {
+          "id": "I-01",
+          "name": "序列号四通道一致",
+          "auditRefs": ["F-05", "G-05"],
+          "command": "比对 DMI 的 product_serial、内核命令行的 androidboot.serialno、ro.serialno 与 ro.boot.serialno",
+          "expected": "四者全等",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "I-02",
+          "name": "Android ID 全实例唯一",
+          "auditRefs": ["F-05"],
+          "command": "各实例执行 settings get secure android_id 后在宿主侧汇总比对",
+          "expected": "全实例互不相同。取到相同值即直接构成同设备多账号的判定",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "I-03",
+          "name": "Android ID 等于实例配置值",
+          "auditRefs": ["F-05", "G-05"],
+          "command": "settings get secure android_id",
+          "expected": "与实例 deviceIdentity.androidId 完全相等。下发了但没落地比未下发更难排查",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "I-04",
+          "name": "MAC 与序列号的派生关系成立",
+          "auditRefs": ["H-01"],
+          "command": "cat /sys/class/net/*/address",
+          "expected": "与实例 serialNo 按派生规则重算的结果，末三字节相等",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "I-05",
+          "name": "架构串无内部矛盾",
+          "auditRefs": ["X-01"],
+          "command": "getprop ro.product.cpu.abilist64; uname -m",
+          "expected": "两者架构一致。本条只要求不自相矛盾，不要求消除 x86_64 本身",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        },
+        {
+          "id": "I-06",
+          "name": "通道接通报告完整",
+          "auditRefs": ["F-05", "G-05"],
+          "command": "读取实例启动后产出的通道接通报告",
+          "expected": "identity.channels 的六个字段均有实测结论，无 untested 遗留",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null
+        }
+      ]
+    }
+  ],
+  "fillPolicy": [
+    "status 只填真实实测结论，未实测一律保持 untested；不得由实现意图或期望结果推导状态。",
+    "状态脱离 untested 时必须同时补齐 measuredAt 与 evidence，否则该结论无法复核。",
+    "已判定在本产品技术路线下做不到的指标同样要回填 fail 并写明依据；长期停在 untested 会让台账看起来还有希望，实际是已判定做不到。",
+    "反向功能指标判定为 pass 表示功能正常，与其余指标的通过方向相反，不得按「未暴露」的读法解读。",
+    "本台账不作为镜像准入门槛，未通过的指标只登记为已知暴露，不淘汰镜像。"
+  ]
+}

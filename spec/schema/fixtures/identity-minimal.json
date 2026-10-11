@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "serialNo": "XBSN0A1B2C3D4E5F",
+  "androidId": "3f7a91c4de20b865",
+  "mac": "3a:1f:0c:9d:2b:74",
+  "deviceProfile": {
+    "profileId": "xb-alpha-11",
+    "brand": "Xion",
+    "manufacturer": "Xion Devices",
+    "productName": "Xion Vibe 12",
+    "productVersion": "12.0",
+    "productFamily": "Xion Vibe",
+    "productSku": "XV12-256-8",
+    "cpuArchitecture": "x86_64"
+  }
+}
