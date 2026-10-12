@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "semantics": {
     "subject": "测的是实例在检测方视角下是否像一台真机，不是功能是否可用。功能可用性由 image.schema.json 的 verified.fidelity 承载，两者测的不是一件事，不可互相替代。",
     "stateDirection": "pass = 未暴露，fail = 已暴露。方向与保真度相反：保真度是功能可用才算 pass，本台账是不被判定为环境才算 pass。",
@@ -128,6 +128,64 @@
           "reverseFunctional": false,
           "measuredAt": "2026-10-12T00:37:18+08:00",
           "evidence": "wm10-verify/probes/C-03.txt"
+        },
+        {
+          "id": "C-04",
+          "name": "时钟源命名无 hyperv 前缀",
+          "auditRefs": [
+            "M-10"
+          ],
+          "command": "cat /sys/devices/system/clocksource/clocksource0/current_clocksource /sys/devices/system/clocksource/clocksource0/available_clocksource | grep -ciE 'hyperv'",
+          "expected": "0。current 与 available 两处均不出现 hyperv 前缀",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
+        }
+      ]
+    },
+    {
+      "id": "device-model",
+      "name": "设备模型与内核符号",
+      "metrics": [
+        {
+          "id": "V-01",
+          "name": "内核模块表无 virtio 驱动名",
+          "auditRefs": [
+            "H-03"
+          ],
+          "command": "cat /proc/modules | grep -ic virtio",
+          "expected": "0。模块表中不出现 virtio_* 形态的驱动名",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
+        },
+        {
+          "id": "V-02",
+          "name": "中断表无 virtio 设备名",
+          "auditRefs": [
+            "H-04"
+          ],
+          "command": "grep -ic virtio /proc/interrupts",
+          "expected": "0。行末设备名不出现 virtioN-* 形态的中断名",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
+        },
+        {
+          "id": "V-03",
+          "name": "分区表无冗余 ram 分区",
+          "auditRefs": [
+            "M-11"
+          ],
+          "command": "awk '{print $4}' /proc/partitions | grep -c '^ram[0-9]'",
+          "expected": "0。不存在以 ram 开头的分区名",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
         }
       ]
     },
@@ -466,6 +524,46 @@
           "reverseFunctional": true,
           "measuredAt": "2026-10-12T00:37:18+08:00",
           "evidence": "wm10-verify/probes/R-05.txt"
+        },
+        {
+          "id": "R-06",
+          "name": "SELinux 已收敛到 Enforcing",
+          "auditRefs": [
+            "H-06"
+          ],
+          "command": "getenforce",
+          "expected": "输出 Enforcing",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
+        },
+        {
+          "id": "R-07",
+          "name": "内核日志无 permissive 审计噪声",
+          "auditRefs": [
+            "H-06",
+            "M-13"
+          ],
+          "command": "dmesg | grep -c 'avc: denied.*permissive=1'",
+          "expected": "0",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
+        },
+        {
+          "id": "R-08",
+          "name": "内核未内置 KernelSU",
+          "auditRefs": [
+            "H-08"
+          ],
+          "command": "cat /proc/kallsyms | grep -ciE 'ksu'; uname -r | grep -ci ksu; cat /proc/version | grep -ci ksu",
+          "expected": "三行均为 0：符号表、uname -r 与 /proc/version 均不含 ksu 字样。若 /proc/kallsyms 因 kptr_restrict 输出全零，第一行不具判别力，须另以内核配置 CONFIG_KSU 复核",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
         }
       ]
     },
@@ -544,6 +642,59 @@
           "reverseFunctional": false,
           "measuredAt": "2026-10-12T00:37:18+08:00",
           "evidence": "wm10-verify/probes/T-03.txt"
+        },
+        {
+          "id": "T-04",
+          "name": "主机名非默认值且与机型代号同源",
+          "auditRefs": [
+            "M-04"
+          ],
+          "command": "hostname; hostname | grep -c '^localhost$'",
+          "expected": "计数行为 0（主机名不等于 localhost）。主机名的代号部分与 DMI 的 product_name 代号部分一致",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
+        },
+        {
+          "id": "T-05",
+          "name": "内核版本串无构建分支痕迹",
+          "auditRefs": [
+            "M-04"
+          ],
+          "command": "uname -r | grep -ciE 'gloria|xanmod'",
+          "expected": "0",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
+        },
+        {
+          "id": "T-06",
+          "name": "内核编译串无构建者标识",
+          "auditRefs": [
+            "M-04"
+          ],
+          "command": "cat /proc/version | grep -cE '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+'",
+          "expected": "0。不出现 user@host 形态的构建者标识",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
+        },
+        {
+          "id": "T-07",
+          "name": "可见内核命令行无虚拟化与安装态标记",
+          "auditRefs": [
+            "L-02",
+            "M-11"
+          ],
+          "command": "cat /proc/cmdline | tr ' ' '\\n' | grep -cE '^(root=/dev/ram[0-9]+|nomodeset|SRC=|rammode=|console=ttyS)'",
+          "expected": "0",
+          "status": "untested",
+          "reverseFunctional": false,
+          "measuredAt": null,
+          "evidence": null
         }
       ]
     },
