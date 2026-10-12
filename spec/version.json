@@ -6,7 +6,7 @@
     "version": "0.1.0"
   },
   "spec": {
-    "version": "2.2.0",
+    "version": "2.2.1",
     "description": "共享规格层版本，覆盖 spec/ 下全部机器可读契约（schema、tokens、terminology、brand、icons、baseline、detection-surface、version）。"
   },
   "terminology": {
