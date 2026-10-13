@@ -558,8 +558,8 @@
           "auditRefs": [
             "H-08"
           ],
-          "command": "cat /proc/kallsyms | grep -ciE 'ksu'; uname -r | grep -ci ksu; cat /proc/version | grep -ci ksu",
-          "expected": "三行均为 0：符号表、uname -r 与 /proc/version 均不含 ksu 字样。若 /proc/kallsyms 因 kptr_restrict 输出全零，第一行不具判别力，须另以内核配置 CONFIG_KSU 复核",
+          "command": "cat /proc/kallsyms | grep -cE '(^|[^A-Za-z0-9_])ksu'; uname -r | grep -ci ksu; cat /proc/version | grep -ci ksu",
+          "expected": "三行均为 0：符号表按词界匹配无 ksu 段（判据重校准：原大小写不敏感子串 ksu 会把内核 checksum/chksum 符号族整族误计入，实测 86 处命中全为校验和符号的误报；词界匹配才具判别力），uname -r 与 /proc/version 均不含 ksu 字样。若 /proc/kallsyms 因 kptr_restrict 输出全零，第一行不具判别力，须另以内核配置 CONFIG_KSU 复核",
           "status": "fail",
           "reverseFunctional": false,
           "measuredAt": "2026-10-12T13:42:02+08:00",
