@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "semantics": {
     "subject": "测的是实例在检测方视角下是否像一台真机，不是功能是否可用。功能可用性由 image.schema.json 的 verified.fidelity 承载，两者测的不是一件事，不可互相替代。",
     "stateDirection": "pass = 未暴露，fail = 已暴露。方向与保真度相反：保真度是功能可用才算 pass，本台账是不被判定为环境才算 pass。",
@@ -25,8 +25,8 @@
           "expected": "无输出",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/D-01.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/D-01.txt"
         },
         {
           "id": "D-02",
@@ -39,8 +39,8 @@
           "expected": "无输出",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/D-02.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/D-02.txt"
         },
         {
           "id": "D-03",
@@ -53,8 +53,8 @@
           "expected": "退出码 0",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/D-03.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/D-03.txt"
         },
         {
           "id": "D-04",
@@ -66,8 +66,8 @@
           "expected": "无输出",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/D-04.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/D-04.txt"
         },
         {
           "id": "D-05",
@@ -80,8 +80,8 @@
           "expected": "与 getprop ro.product.model 比对，前者的代号部分是后者的前缀",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/D-05.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/D-05.txt"
         }
       ]
     },
@@ -100,8 +100,8 @@
           "expected": "无输出",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/C-01.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/C-01.txt"
         },
         {
           "id": "C-02",
@@ -113,8 +113,8 @@
           "expected": "无输出",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/C-02.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/C-02.txt"
         },
         {
           "id": "C-03",
@@ -126,8 +126,8 @@
           "expected": "model name 不等于 Intel Core Processor (Skylake)；microcode 不等于 0xffffffff",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/C-03.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/C-03.txt"
         },
         {
           "id": "C-04",
@@ -139,8 +139,8 @@
           "expected": "0。current 与 available 两处均不出现 hyperv 前缀",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/C-04.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/C-04.txt"
         }
       ]
     },
@@ -158,8 +158,8 @@
           "expected": "0。模块表中不出现 virtio_* 形态的驱动名",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/V-01.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/V-01.txt"
         },
         {
           "id": "V-02",
@@ -171,8 +171,8 @@
           "expected": "0。行末设备名不出现 virtioN-* 形态的中断名",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/V-02.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/V-02.txt"
         },
         {
           "id": "V-03",
@@ -184,8 +184,8 @@
           "expected": "0。不存在以 ram 开头的分区名",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/V-03.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/V-03.txt"
         }
       ]
     },
@@ -203,8 +203,8 @@
           "expected": "不等于 QEMU",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-01.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-01.txt"
         },
         {
           "id": "S-02",
@@ -216,8 +216,8 @@
           "expected": "非空且非 unknown",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-02.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-02.txt"
         },
         {
           "id": "S-03",
@@ -229,8 +229,8 @@
           "expected": "1",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-03.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-03.txt"
         },
         {
           "id": "S-04",
@@ -242,8 +242,8 @@
           "expected": "1",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-04.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-04.txt"
         },
         {
           "id": "S-05",
@@ -255,8 +255,8 @@
           "expected": "指纹内的类型段与 ro.build.type 相同。类型段写 userdebug 而类型属性写 user 是可被一致性校验直接命中的破绽",
           "status": "fail",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-05.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-05.txt"
         },
         {
           "id": "S-06",
@@ -268,8 +268,8 @@
           "expected": "与指纹的产品段同源，不含镜像来源痕迹",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-06.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-06.txt"
         },
         {
           "id": "S-07",
@@ -282,8 +282,8 @@
           "expected": "无输出",
           "status": "fail",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-07.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-07.txt"
         },
         {
           "id": "S-08",
@@ -295,8 +295,8 @@
           "expected": "0",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-08.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-08.txt"
         },
         {
           "id": "S-09",
@@ -309,8 +309,8 @@
           "expected": "三者均为机型族派生值，不含 x86_64",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-09.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-09.txt"
         },
         {
           "id": "S-10",
@@ -322,8 +322,8 @@
           "expected": "保留 Root 权限与可写系统时三者按 bootIdentity 判定为同向，不出现完整校验通过的零售机画像与可写 root 并存",
           "status": "fail",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-10.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-10.txt"
         },
         {
           "id": "S-11",
@@ -335,8 +335,8 @@
           "expected": "按 bootIdentity 派生，不出现三个 unknown 并存",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/S-11.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/S-11.txt"
         }
       ]
     },
@@ -354,8 +354,8 @@
           "expected": "非 swiftshader 且非 pastel",
           "status": "fail",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/G-01.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/G-01.txt"
         }
       ]
     },
@@ -373,8 +373,8 @@
           "expected": "非 52:54:00 前缀；非全零；末字节非组播位",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/N-01.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/N-01.txt"
         },
         {
           "id": "N-02",
@@ -386,8 +386,8 @@
           "expected": "两次输出完全相同。MAC 逐次跳变本身即是异常特征",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/N-02.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/N-02.txt"
         },
         {
           "id": "N-03",
@@ -399,8 +399,8 @@
           "expected": "不含 10.0.2.",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/N-03.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/N-03.txt"
         },
         {
           "id": "N-04",
@@ -412,8 +412,8 @@
           "expected": "至少 1 条。真机永远有默认路由，缺失比网段本身更致命",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/N-04.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/N-04.txt"
         },
         {
           "id": "N-05",
@@ -425,8 +425,8 @@
           "expected": "不等于 10.0.2.3",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/N-05.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/N-05.txt"
         },
         {
           "id": "N-06",
@@ -438,8 +438,8 @@
           "expected": "wlan0 存在且 eth0 不存在",
           "status": "fail",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/N-06.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/N-06.txt"
         },
         {
           "id": "N-07",
@@ -451,8 +451,8 @@
           "expected": "返回 ok。投屏、文件传输与安装模块全部依赖调试通路，断链的后果比暴露更严重",
           "status": "pass",
           "reverseFunctional": true,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/N-07.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/N-07.txt"
         }
       ]
     },
@@ -470,8 +470,8 @@
           "expected": "无输出",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/R-01.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/R-01.txt"
         },
         {
           "id": "R-02",
@@ -483,8 +483,8 @@
           "expected": "取值为 1；uid=0。隐藏痕迹不得以削弱 Root 权限为代价",
           "status": "pass",
           "reverseFunctional": true,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/R-02.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/R-02.txt"
         },
         {
           "id": "R-03",
@@ -496,8 +496,8 @@
           "expected": "无输出",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/R-03.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/R-03.txt"
         },
         {
           "id": "R-04",
@@ -509,8 +509,8 @@
           "expected": "路径不存在或已改名",
           "status": "fail",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/R-04.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/R-04.txt"
         },
         {
           "id": "R-05",
@@ -522,8 +522,8 @@
           "expected": "系统叠加生效且阶段脚本按序执行。目录改名不得让已装模块失去加载入口",
           "status": "pass",
           "reverseFunctional": true,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/R-05.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/R-05.txt"
         },
         {
           "id": "R-06",
@@ -535,8 +535,8 @@
           "expected": "输出 Enforcing",
           "status": "fail",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/R-06.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/R-06.txt"
         },
         {
           "id": "R-07",
@@ -549,8 +549,8 @@
           "expected": "0",
           "status": "fail",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/R-07.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/R-07.txt"
         },
         {
           "id": "R-08",
@@ -562,8 +562,8 @@
           "expected": "三行均为 0：符号表按词界匹配无 ksu 段（判据重校准：原大小写不敏感子串 ksu 会把内核 checksum/chksum 符号族整族误计入，实测 86 处命中全为校验和符号的误报；词界匹配才具判别力），uname -r 与 /proc/version 均不含 ksu 字样。若 /proc/kallsyms 因 kptr_restrict 输出全零，第一行不具判别力，须另以内核配置 CONFIG_KSU 复核",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/R-08.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/R-08.txt"
         }
       ]
     },
@@ -581,8 +581,8 @@
           "expected": "各实例互不相同；同一实例跨重启保持不变",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/F-01.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/F-01.txt"
         },
         {
           "id": "F-02",
@@ -594,8 +594,8 @@
           "expected": "仅含本实例派生值",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/F-02.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/F-02.txt"
         }
       ]
     },
@@ -614,8 +614,8 @@
           "expected": "至少 1 条",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/T-01.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/T-01.txt"
         },
         {
           "id": "T-02",
@@ -627,8 +627,8 @@
           "expected": "无输出",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/T-02.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/T-02.txt"
         },
         {
           "id": "T-03",
@@ -640,8 +640,8 @@
           "expected": "不含 ttyS0",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/T-03.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/T-03.txt"
         },
         {
           "id": "T-04",
@@ -653,8 +653,8 @@
           "expected": "计数行为 0（主机名不等于 localhost）。主机名的代号部分与 DMI 的 product_name 代号部分一致",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/T-04.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/T-04.txt"
         },
         {
           "id": "T-05",
@@ -666,8 +666,8 @@
           "expected": "0",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/T-05.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/T-05.txt"
         },
         {
           "id": "T-06",
@@ -679,8 +679,8 @@
           "expected": "0。不出现本产品构建环境的泄露标识（实验机构名、构建主机名、内核分支名、构建用户名）；AOSP 农场通用串 android-build@android-build 与真机一致，不计为泄露",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/T-06.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/T-06.txt"
         },
         {
           "id": "T-07",
@@ -693,8 +693,8 @@
           "expected": "0",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/T-07.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/T-07.txt"
         }
       ]
     },
@@ -713,8 +713,8 @@
           "expected": "四者全等",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/I-01.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/I-01.txt"
         },
         {
           "id": "I-02",
@@ -726,8 +726,8 @@
           "expected": "全实例互不相同。取到相同值即直接构成同设备多账号的判定",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/I-02.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/I-02.txt"
         },
         {
           "id": "I-03",
@@ -740,8 +740,8 @@
           "expected": "与实例 deviceIdentity.androidId 完全相等。下发了但没落地比未下发更难排查",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/I-03.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/I-03.txt"
         },
         {
           "id": "I-04",
@@ -753,8 +753,8 @@
           "expected": "与实例 serialNo 按派生规则重算的结果，末三字节相等",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/I-04.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/I-04.txt"
         },
         {
           "id": "I-05",
@@ -766,8 +766,8 @@
           "expected": "两者架构一致。本条只要求不自相矛盾，不要求消除 x86_64 本身",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/I-05.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/I-05.txt"
         },
         {
           "id": "I-06",
@@ -780,8 +780,8 @@
           "expected": "identity.channels 的六个字段均有实测结论，无 untested 遗留",
           "status": "pass",
           "reverseFunctional": false,
-          "measuredAt": "2026-10-14T01:13:49+08:00",
-          "evidence": "wm13-verify/probes/I-06.txt"
+          "measuredAt": "2026-10-14T10:04:20+08:00",
+          "evidence": "wm14-sfix/probes/I-06.txt"
         }
       ]
     }
